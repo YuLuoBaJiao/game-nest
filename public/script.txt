@@ -1,0 +1,210 @@
+<script>
+//     function toggleLogin() {
+//         var loginBox = document.getElementById('loginBox');
+//         if (loginBox.style.display === 'none' || loginBox.style.display === '') {
+//             loginBox.style.display = 'block'; // 显示登录框
+//         } else {
+//             loginBox.style.display = 'none'; // 隐藏登录框
+//         }
+//     }
+//     // 初始化时隐藏登录框
+//     document.getElementById('loginBox').style.display = 'none';
+
+// // 增加界面切换
+// document.querySelector('a.denglu1').addEventListener('click', function(e) {
+//     e.preventDefault();
+//     document.getElementById('loginBox').style.display = 'none';
+//     document.getElementById('registerBox').style.display = 'block';
+    
+//     // 新增：清空错误提示
+//     document.getElementById('errorMsg').style.display = 'none';
+// });
+// document.querySelector('.switch-login').addEventListener('click', (e) => {
+//     e.preventDefault();
+//     document.getElementById('loginBox').style.display = 'block';
+//     document.getElementById('registerBox').style.display = 'none';
+// });
+
+// // 注册功能
+// document.getElementById('regBtn').addEventListener('click', async () => {
+
+// });
+ // 初始化隐藏登录框
+ document.getElementById('loginBox').style.display = 'none';
+
+
+         // 新增登录功能
+         document.getElementById('loginBtn').addEventListener('click', async () => {
+    const username = document.querySelector('.login2').value.trim();
+    const password = document.querySelector('.login3').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    
+    // 清空旧消息
+    errorMsg.textContent = '';
+    errorMsg.style.display = 'none';
+
+    try {
+        // 1. 前端验证
+        if (!username || !password) {
+            throw new Error('请输入用户名和密码');
+        }
+
+        // 2. 发送请求
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        // 3. 处理响应
+        if (response.ok) {
+            localStorage.setItem('authToken', result.data.token);
+            window.location.href = result.data.redirectUrl; // 动态跳转
+        } else {
+            errorMsg.textContent = result.message;
+            errorMsg.style.display = 'block';
+            // 抖动动画提示
+            errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+        }
+    } catch (error) {
+        errorMsg.textContent = error.message || '网络连接失败，请检查网络';
+        errorMsg.style.display = 'block';
+    }
+});
+
+// 改进的切换函数
+function toggleForms(hideId, showId) {
+    if (hideId) {
+        const hideElement = document.getElementById(hideId);
+        hideElement.style.opacity = 0;
+        setTimeout(() => {
+            hideElement.style.display = 'none';
+        }, 300);
+    }
+
+    const showElement = document.getElementById(showId);
+    showElement.style.display = 'block';
+    setTimeout(() => {
+        showElement.style.opacity = 1;
+    }, 50);
+}
+
+// 界面切换事件绑定
+document.querySelector('a.denglu1').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms('loginBox', 'registerBox');
+    document.getElementById('errorMsg').style.display = 'none';
+});
+
+document.querySelector('.switch-login').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms('registerBox', 'loginBox');
+});
+
+// 顶部登录按钮事件
+document.getElementById('showLoginBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms(null, 'loginBox');
+});
+
+// 注册功能（修改后）
+// 修改注册功能部分
+document.getElementById('regBtn').addEventListener('click', async () => {
+    const username = document.querySelector('.reg-user').value.trim();
+    const password = document.querySelector('.reg-pwd').value.trim();
+    const errorMsg = document.getElementById('regErrorMsg');
+
+    errorMsg.textContent = '';
+    errorMsg.style.display = 'none';
+
+    try {
+        if (!username || !password) {
+            throw new Error('用户名和密码不能为空');
+        }
+
+        const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // 注册成功后的操作
+            document.getElementById('registerBox').style.display = 'none';
+            document.getElementById('loginBox').style.display = 'block';
+            
+            // 清空注册信息
+            document.querySelector('.reg-user').value = '';
+            document.querySelector('.reg-pwd').value = '';
+            
+            // 显示成功提示（可选）
+            errorMsg.style.color = 'green';
+            errorMsg.textContent = '注册成功，请登录';
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.textContent = result.message;
+            errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+        }
+    } catch (error) {
+        errorMsg.textContent = error.message || '注册失败，请重试';
+        errorMsg.style.display = 'block';
+    }
+
+    if (response.ok) {
+        // 修改后的切换方式
+        toggleForms('registerBox', 'loginBox');
+        
+        // 清空注册信息
+        document.querySelector('.reg-user').value = '';
+        document.querySelector('.reg-pwd').value = '';
+        
+        // 在登录框显示成功提示
+        const loginErrorMsg = document.getElementById('errorMsg');
+        loginErrorMsg.style.color = 'green';
+        loginErrorMsg.textContent = '注册成功，请登录';
+        loginErrorMsg.style.display = 'block';
+    }
+    // ...保持其他代码不变...
+});
+</script>
+</script>
+
+
+最原始的:
+//     function toggleLogin() {
+//         var loginBox = document.getElementById('loginBox');
+//         if (loginBox.style.display === 'none' || loginBox.style.display === '') {
+//             loginBox.style.display = 'block'; // 显示登录框
+//         } else {
+//             loginBox.style.display = 'none'; // 隐藏登录框
+//         }
+//     }
+//     // 初始化时隐藏登录框
+//     document.getElementById('loginBox').style.display = 'none';
+
+// // 增加界面切换
+// document.querySelector('a.denglu1').addEventListener('click', function(e) {
+//     e.preventDefault();
+//     document.getElementById('loginBox').style.display = 'none';
+//     document.getElementById('registerBox').style.display = 'block';
+    
+//     // 新增：清空错误提示
+//     document.getElementById('errorMsg').style.display = 'none';
+// });
+// document.querySelector('.switch-login').addEventListener('click', (e) => {
+//     e.preventDefault();
+//     document.getElementById('loginBox').style.display = 'block';
+//     document.getElementById('registerBox').style.display = 'none';
+// });
+
+// // 注册功能
+// document.getElementById('regBtn').addEventListener('click', async () => {
+
+// });

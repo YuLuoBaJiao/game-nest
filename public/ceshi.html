@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>先锋测试</title>
+    <link rel="stylesheet" href="./ceshi.css">
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+    <div class="topbq">
+        <ul>
+            <li><a href="#" class="top-bq">预约</a></li>
+            <li><a href="ceshi.html" class="top-bq" style="color: orange">订阅</a></li>
+            <li><a href="#" class="top-bq">社区</a></li>
+            <li class="dropdown-container">
+                <a href="#" class="top-bq">更多 ▼</a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item" onclick="showNotifications()">📩 通知</div>
+                    <div class="dropdown-item" onclick="showSettings()">⚙️ 设置</div>
+                    <!-- 开发者专属 -->
+                    <div class="dev-item" onclick="checkDeveloperAccess(event)">💻 开发者中心</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="搜索..." style="height: 30px;width: 350px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;border: none;background: whitesmoke">
+        <button style="margin-left:-10px;height: 40px;width: 60px;border-bottom-right-radius:15px;border-top-right-radius:15px;border: none;background: whitesmoke;color: black ">搜索</button>
+    </div>
+    <div class="login">
+        <a href="library.html">
+        <button type="download"  >我的游戏库</button>
+        </a>
+    </div>
+</header>
+
+<div style="height: 65px;width: 100%"></div>
+<div class="body">
+    <img src="img/ceshiboy.png">
+    <div class="body1">
+        <div class="b1">
+            <div class="b1a"><font size="3" color="#d3d3d3">提交测试游戏详情</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" placeholder="搜索..."></div>
+            <div class="b1b"><img src="img/ceshilogo.png" height="60" width="245"/></div>
+            <div class="b1c"><font size="5" color="#f5f5f5"><b>新鲜试玩</b> </font></div>
+        </div>
+        <div class="b2">
+            <div class="b2-1">
+                <img id="image" src="img/b2-1.png" height="436" width="772"/>
+                <br>
+                <b><font id="text" size="4">弹珠地狱洛坎塔</font></b>
+                <br><br>
+                <font size="4">评分：</font><b><font id="text2" size="4" color="orange">6.1/10.0</font></b>                <button type="buy">马上开抢</button>
+                <br>
+                <b><font size="4"color="gray">更多信息请持续关注本平台，本平台会第一时间为您推送...</font></b>
+
+            </div>
+            <div class="b2-2">
+                <div class="b2-2a"><button onclick="changeContent(1) " type="btn"><img src="img/btn1.png" height="102" width="215"/></button></div>
+                <div class="b2-2a"><button onclick="changeContent(2) " type="btn"><img src="img/btn2.jpg" height="102" width="215"/></button></div>
+                <div class="b2-2a"><button onclick="changeContent(3) " type="btn"><img src="img/btn3.png" height="102" width="215"/></button></div>
+                <div class="b2-2a"><button onclick="changeContent(4) " type="btn"><img src="img/btn4.jpg" height="102" width="215"/></button></div>
+                <div class="b2-2a"><button onclick="changeContent(5) " type="btn"><img src="img/btn5.png" height="102" width="215"/></button></div>
+            </div>
+        </div>
+        <div class="b3a">
+
+            <div class="b3">
+    
+                    <div class="b3-date1">
+                        <div class="b3-date2">游戏订阅</div>
+                    </div>
+                <div class="b3-2">
+                    <!-- <div class="b3-2a">
+                        <div class="b3-2a1"><img src="img/dingyue1.png" height="192" width="305"/></div>
+                        <div class="b3-2a2">                        </div>
+                        <div class="b3-2a3">
+                            <button type="dingyue" id="reserve-button">了解更多</button>
+                            <button type="dingyue" id="reserve-button">立即订阅</button>
+                        </div>
+                    </div> -->
+                    <div class="b3-2a">
+                        <div class="b3-2a1"><img src="img/dingyue1.png" height="192" width="305"/></div>
+                        <div class="b3-2a2">                        </div>
+                        <div class="b3-2a3">
+                            <button type="dingyue" id="reserve-button">了解更多</button>
+                            <button type="dingyue" 
+                                    class="subscribe-btn"
+                                    data-game-id="game1" 
+                                    data-game-name="泡泡幸存者">
+                              立即订阅
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="b3-2">
+                  <div class="b3-2a">
+                    <div class="b3-2a1"><img src="img/dingyue2.png" height="192" width="305"/></div>
+                    <div class="b3-2a2">                        </div>
+                    <div class="b3-2a3">
+                        <button type="dingyue" id="reserve-button">了解更多</button>
+                        <button type="dingyue" 
+                                class="subscribe-btn"
+                                data-game-id="game2" 
+                                data-game-name="火种计划">
+                          立即订阅
+                        </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="b3-2">
+                  <div class="b3-2a">
+                    <div class="b3-2a1"><img src="img/dingyue3.png" height="192" width="305"/></div>
+                    <div class="b3-2a2">                        </div>
+                    <div class="b3-2a3">
+                        <button type="dingyue" id="reserve-button">了解更多</button>
+                        <button type="dingyue" 
+                                class="subscribe-btn"
+                                data-game-id="game3" 
+                                data-game-name="龙吟立志传">
+                          立即订阅
+                        </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="b3-2" id="subscribedGamesContainer"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="accessDeniedToast" style="display: none;">
+  当前账号无开发者权限！
+</div>
+</body>
+<script>
+    function changeContent(buttonIndex) {
+        const image = document.getElementById('image');
+        const text = document.getElementById('text');
+        const text2 = document.getElementById('text2');
+        const buttons = document.querySelectorAll('.b2-2a');
+
+        // 改变文本和图片
+        switch (buttonIndex) {
+            case 1:
+                image.src = './img/b2-1.png';
+                text.innerText = '弹珠地狱洛坎塔';
+                text2.innerText = '6.1/10.0';
+                break;
+            case 2:
+                image.src = './img/b2-2.png';
+                text.innerText = '墨境';
+                text2.innerText = '8.9/10.0';
+                break;
+            case 3:
+                image.src = './img/b2-3.png';
+                text.innerText = '职场浮生记';
+                text2.innerText = '5.4/10.0';
+                break;
+            case 4:
+                image.src = './img/b2-4.png';
+                text.innerText = '动物栏：桌面牧场';
+                text2.innerText = '7.8/10.0';
+                break;
+            case 5:
+                image.src = './img/b2-5.png';
+                text.innerText = '破碎联盟';
+                text2.innerText = '7.1/10.0';
+                break;
+        }
+        // 移除所有按钮的活跃状态
+        buttons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // 添加活跃状态到当前按钮
+        buttons[buttonIndex - 1].classList.add('active');
+    }
+
+
+    async function loadSubscribedGames() {
+    try {
+        const response = await fetch('/api/games/approved?type=subscribe');
+        const games = await response.json();
+        
+        const container = document.getElementById('subscribedGamesContainer');
+        container.innerHTML = '';
+        
+        games.forEach(game => {
+            const gameHTML = `
+                <div class="b3-2a">
+                    <div class="b3-2a1">
+                        <img src="${game.cover}" height="192" width="305"/>
+                    </div>
+                    <div class="b3-2a3">
+                        <button type="dingyue">了解更多</button>
+                        <button type="dingyue" 
+                                class="subscribe-btn"
+                                data-game-id="${game.id}" 
+                                data-game-name="${game.title}">
+                            立即订阅
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', gameHTML);
+        });
+        
+        initSubscribeButtons();
+    } catch (error) {
+        console.error('加载订阅游戏失败:', error);
+    }
+}
+
+// 页面加载时调用
+document.addEventListener('DOMContentLoaded', () => {
+    loadSubscribedGames();
+    // 保持原有其他初始化...
+});
+  // 修改检查开发者权限的方法
+  function checkDeveloperAccess(event) {
+    event.preventDefault();
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+        showCustomAlert('⚠️ 请先登录', '您需要登录后才能访问开发者中心');
+        return;
+    }
+
+    fetch('/api/check-developer', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        if (response.status === 200) {
+            window.location.href = 'kaifa.html';
+        } else if (response.status === 403) {
+            showAccessDeniedToast(); // 新增专用提示方法
+        } else {
+            showCustomAlert('错误', '未知错误，状态码：' + response.status);
+        }
+    })
+    .catch(error => {
+        console.error('权限验证失败:', error);
+        showCustomAlert('错误', '网络连接异常，请稍后重试');
+    });
+}
+
+// 新增专用权限提示
+function showAccessDeniedToast() {
+    const toast = document.getElementById('accessDeniedToast');
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2000);
+}
+        // ====================== 新增 Toast 提示组件 ====================== 
+const Toast = {
+  show: (message, isSuccess = true) => {
+    const toast = document.createElement('div');
+    toast.className = `custom-toast ${isSuccess ? 'success' : 'error'}`;
+    toast.innerHTML = `
+      <span>${isSuccess ? '✅' : '⚠️'}</span>
+      <p>${message}</p>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
+};
+
+// ====================== 订阅核心逻辑 ======================
+const handleSubscribe = async (button) => {
+  const gameId = button.dataset.gameId;
+  const gameName = button.dataset.gameName;
+  const isSubscribed = button.textContent.includes('已订阅');
+
+  try {
+    const response = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      },
+      body: JSON.stringify({
+        gameId,
+        gameName,  // 添加游戏名称参数
+        action: isSubscribed ? 'remove' : 'add'
+      })
+    });
+
+    if (!response.ok) throw new Error('操作失败');
+    
+    button.textContent = isSubscribed ? '立即订阅' : '已订阅';
+    button.style.backgroundColor = isSubscribed ? '#6c757d' : '#ff6b6b';
+    Toast.show(isSubscribed ? `已取消订阅 ${gameName}` : `成功订阅 ${gameName}`);
+  } catch (error) {
+    Toast.show(error.message || '网络错误，请重试', false);
+  }
+};
+
+// ====================== 初始化订阅按钮状态 ======================
+const initSubscribeButtons = async () => {
+  try {
+    const response = await fetch('/api/library', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+    
+    const { subscriptions } = await response.json();
+    document.querySelectorAll('.subscribe-btn').forEach(button => {
+      const gameId = button.dataset.gameId;
+      const isSubscribed = subscriptions.some(s => s.id === gameId);
+      
+      if (isSubscribed) {
+        button.textContent = '已订阅';
+        button.style.backgroundColor = '#ff6b6b';
+      }
+    });
+  } catch (error) {
+    Toast.show('初始化订阅数据失败', false);
+  }
+};
+
+// 事件绑定
+document.querySelectorAll('.subscribe-btn').forEach(button => {
+  button.addEventListener('click', () => handleSubscribe(button));
+});
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', initSubscribeButtons);
+</script>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="./shouye.css">
+</head>
+<body>
+<header>
+    <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+    <div class="topbq">
+        <ul>
+            <li><a href="#" class="top-bq" style="color: orange">预约</a></li>
+            <li><a href="ceshi.html" class="top-bq">订阅</a></li>
+            <li><a href="#" class="top-bq">社区</a></li>
+            <li class="dropdown-container">
+                <a href="#" class="top-bq">更多 ▼</a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item" onclick="showNotifications()">📩 通知</div>
+                    <div class="dropdown-item" onclick="showSettings()">⚙️ 设置</div>
+                    <!-- 开发者专属 -->
+                    <div class="dev-item" onclick="checkDeveloperAccess(event)">💻 开发者中心</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="搜索..." style="height: 30px;width: 350px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;border: none;background: whitesmoke">
+        <button style="margin-left:-10px;height: 40px;width: 60px;border-bottom-right-radius:15px;border-top-right-radius:15px;border: none;background: whitesmoke;color: black ">搜索</button>
+    </div>
+    <div class="login">
+        <a href="library.html">
+        <button type="download"  >我的游戏库</button>
+        </a>
+    </div>
+</header>
+<div style="height: 65px;width: 100%"></div>
+<div class="body1">
+
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide" id="slide0">
+                    <img src="./img/lunbo1.png" alt="图片1" height="706" width="100%"/>
+                </div>
+                <div class="slide" id="slide1">
+                    <img src="./img/lunbo2.png" alt="图片2" height="706" width="100%">
+                </div>
+                <div class="slide" id="slide2">
+                    <img src="./img/lunbo3.png" alt="图片3" height="706" width="100%">
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-button" id="prev">❮</button>
+                <button class="control-button" id="next">❯</button>
+            </div>
+        </div>
+</div>
+<div class="body2">
+    <div class="b2">
+        <div class="b2-1">
+            新游发布
+        </div>
+        <div class="b2-2">
+            <div class="b2-2a">
+                <div class="date1">
+                    <div class="date2">11.21</div>
+                </div>
+                <div class="date3"><img src="img/date1.png" height="327" width="185"/>
+                    <div class="hd1" style="top: 0">
+                        <div class="hover-div">
+                            <video autoplay muted loop  width="300" style="margin-top: 0">
+                                <source src="./video/date1.mp4" type="video/mp4">
+                             </video>
+                        <div class="h1" ><font size="4px">无尽梦回</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="3px" color="#ff4500"><b>好评率：58%</b></font>
+                        </div>
+                            <br>
+                            <div class="h2"><font size="1">roguelike</font></div>
+                            <div class="h2"><font size="1">二次元</font></div>
+                            <div class="h2"><font size="1">冒险RPG</font></div>
+                            <div class="h2"><font size="1">爽快手感</font></div>
+                            <br>
+                            <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">2024-11-24上线</font></div>
+                            <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">多角色动作割草爽游</font></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="b2-2a">
+                <div class="date1">
+                    <div class="date2">11.22</div>
+                </div>
+                <div class="date3-1"><img class="" src="img/date2.png" height="327" width="185"/>
+
+                        <div class="hover-div2">
+                            <div class="hd1"  style="top: 0">
+                            <video autoplay muted loop  width="300" style="margin-top: 0">
+                                <source src="./video/date2.mp4" type="video/mp4">
+                            </video>
+                                <div class="h1" ><font size="4px">孤行异星</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="3px" color="#ff4500"><b>好评率：58%</b></font>
+                                </div>
+                                <br>
+                                <div class="h2"><font size="1">本地合作</font></div>
+                                <div class="h2"><font size="1">休闲</font></div>
+                                <div class="h2"><font size="1">科幻</font></div>
+                                <div class="h2"><font size="1">爽快手感</font></div>
+                                <br>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">2024-11-22上线</font></div>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">同屏在线合作赛车游戏</font></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="b2-2a">
+                <div class="date1">
+                    <div class="date2">11.25</div>
+                </div>
+                <div class="date3-3"><img class="" src="img/date3.png" height="327" width="185"/>
+                    <div class="hover-div3">
+                        <div class="hd1"  style="top: 0">
+                            <video autoplay muted loop  width="300" style="margin-top: 0">
+                                <source src="./video/date3.mp4" type="video/mp4">
+                            </video>
+                            <div class="h1" ><font size="4px">水银疗养院</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="3px" color="#ff4500"><b>好评率：58%</b></font>
+                            </div>
+                            <br>
+                            <div class="h2"><font size="1">解谜</font></div>
+                            <div class="h2"><font size="1">二次元</font></div>
+                            <div class="h2"><font size="1">冒险RPG</font></div>
+                            <div class="h2"><font size="1">独立游戏</font></div>
+                            <br>
+                            <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">2024-11-25上线</font></div>
+                            <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">二次元冒险解密独立游戏</font></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="b2-2a">
+                <div class="date1">
+                    <div class="date2">11.28</div>
+                </div>
+                    <div class="date3-4"><img class="" src="img/date4.png" height="327" width="185"/>
+                        <div class="hover-div4">
+                            <div class="hd1"  style="top: 0">
+                                <video autoplay muted loop  width="300" style="margin-top: 0">
+                                    <source src="./video/date4.mp4" type="video/mp4">
+                                </video>
+                                <div class="h1" ><font size="4px">轩辕传奇：轮回</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="3px" color="#ff4500"><b>好评率：58%</b></font>
+                                </div>
+                                <br>
+                                <div class="h2"><font size="1">神话</font></div>
+                                <div class="h2"><font size="1">国风</font></div>
+                                <div class="h2"><font size="1">仙侠</font></div>
+                                <div class="h2"><font size="1">大逃亡</font></div>
+                                <br>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">2024-11-28上线</font></div>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">山海经背景PVE网络游戏</font></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="b2-2a">
+                <div class="date1">
+                    <div class="date2">12.04</div>
+                </div>
+                    <div class="date3-5"><img class="" src="img/date5.png" height="327" width="185"/>
+                        <div class="hover-div5">
+                            <div class="hd1"  style="top: 0">
+                                <video autoplay muted loop  width="300" style="margin-top: 0">
+                                    <source src="./video/date5.mp4" type="video/mp4">
+                                </video>
+                                <div class="h1" ><font size="4px">完蛋！我被美女包围了</font><font size="3px" color="#ff4500"><b>好评率：58%</b></font>
+                                </div>
+                                <br>
+                                <div class="h2"><font size="1">恋爱</font></div>
+                                <div class="h2"><font size="1">剧情丰富</font></div>
+                                <div class="h2"><font size="1">模拟生活</font></div>
+                                <div class="h2"><font size="1">高画质</font></div>
+                                <br>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">2024-12-04上线</font></div>
+                                <div style="padding-left: 5px;box-sizing: border-box"><font size="2" color="#d3d3d3">全动态真人互动作品</font></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="body3">
+        <div class="b3">
+
+                <div class="b3-date1">
+                    <div class="b3-date2">预约进行中</div>
+                </div>
+            <div class="b3-2">
+                <div class="b3-2a1">
+                    <div class="b3-d3a"><img src="img/yuyue1.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">泡姆泡姆<br>
+                        <span class="reserve-count" data-game-id="game1">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game1" 
+                                    data-game-name="泡姆泡姆">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue2.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">流放之路<br>
+                            <span class="reserve-count" data-game-id="game2">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game2" 
+                                    data-game-name="流放之路">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue3.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">暗区突围<br> 
+                            <span class="reserve-count" data-game-id="game3">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game3" 
+                                    data-game-name="暗区突围">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <div class="b3-2">
+                <div class="b3-2a1">
+                    <div class="b3-d3"><img src="img/yuyue4.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">野蛮人大作战2<br>
+                            <span class="reserve-count" data-game-id="game4">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game4" 
+                                    data-game-name="野蛮人大作战2">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue5.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">洛克王国世界<br>
+                            <span class="reserve-count" data-game-id="game5">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game5" 
+                                    data-game-name="洛克王国世界">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue6.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">异人之下<br>
+                            <span class="reserve-count" data-game-id="game6">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game6" 
+                                    data-game-name="异人之下">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <div class="b3-2">
+                <div class="b3-2a1">
+                    <div class="b3-d3"><img src="img/yuyue7.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">荒野起源<br>
+                            <span class="reserve-count" data-game-id="game7">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game7" 
+                                    data-game-name="荒野起源">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue8.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">诸神竞技场<br>
+                          <span class="reserve-count" data-game-id="game8">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game8" 
+                                    data-game-name="诸神竞技场">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+                <div class="b3-2a">
+                    <div class="b3-d3"><img src="img/yuyue9.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">胜利女神<br>
+                        <span class="reserve-count" data-game-id="game9">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game9" 
+                                    data-game-name="胜利女神">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <div class="b3-2">
+                <div class="b3-2a1">
+                    <div class="b3-d3"><img src="img/yuyue10.png" height="192" width="305"/></div>
+                    <div style="display: flex;margin-top: 15px" class="b3-d3b">
+                        <div style="width: 60%" class="b3-d3b1">矩阵零日危机<br>
+                            <span class="reserve-count" data-game-id="game10">0人预约</span></div>
+                        <div class="b3-d3b2">
+                            <button type="yuyue" 
+                                    class="reserve-btn"
+                                    data-game-id="game10" 
+                                    data-game-name="矩阵零日危机">
+                              立即预约
+                            </button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div></div>
+<!-- <div class="b3-2" id="reservedGamesContainer"></div> -->
+
+<div class="btm">
+    <div class="footer-content">
+        <div class="footer-column">
+            <!-- 下载客户端 -->
+            <div class="download-section">
+                <h3 class="download-header">下载客户端</h3>
+                <div class="download-list">
+                    <a href="#" class="download-item">
+                        Windows版下载
+                    </a>
+                    <a href="#" class="download-item">
+                        Mac版下载
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 官方渠道 -->
+            <div class="official-channel">
+                <h3 class="channel-header">官方渠道</h3>
+                <div class="channel-list">
+                    <a href="#" class="channel-item">
+                        微信
+                    </a>
+                    <a href="#" class="channel-item">
+                        微博
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片区域 -->
+        <div class="footer-image">
+            <img src="img/logo.png" alt="宣传图" style="width:250px;height:80px;object-fit:cover;">
+        </div>
+    </div>
+</div>
+<div id="accessDeniedToast" style="display: none;">
+    当前账号无开发者权限！
+</div>
+</body>
+
+<script>
+        // 登录状态验证
+        if (!localStorage.getItem('authToken')) {
+        window.location.href = 'index.html';
+    }
+
+    // 动态显示用户名（需要后端支持）
+    async function loadUserInfo() {
+        try {
+            const response = await fetch('/api/user', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            const user = await response.json();
+            document.getElementById('username').textContent = user.username;
+        } catch (error) {
+            console.error('获取用户信息失败:', error);
+        }
+    }
+
+    // 修改检查开发者权限的方法
+    function checkDeveloperAccess(event) {
+    event.preventDefault();
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+        showCustomAlert('⚠️ 请先登录', '您需要登录后才能访问开发者中心');
+        return;
+    }
+
+    fetch('/api/check-developer', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        if (response.status === 200) {
+            window.location.href = 'kaifa.html';
+        } else if (response.status === 403) {
+            showAccessDeniedToast(); // 新增专用提示方法
+        } else {
+            showCustomAlert('错误', '未知错误，状态码：' + response.status);
+        }
+    })
+    .catch(error => {
+        console.error('权限验证失败:', error);
+        showCustomAlert('错误', '网络连接异常，请稍后重试');
+    });
+}
+
+// 新增专用权限提示
+function showAccessDeniedToast() {
+    const toast = document.getElementById('accessDeniedToast');
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2000);
+}
+
+    document.addEventListener('DOMContentLoaded', loadUserInfo);
+
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    function showSlides() {
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active'); // 清除所有缩放
+            slide.style.transform = `scale(0.8)`; // 其余缩小
+        });
+
+        slides[currentIndex].classList.add('active'); // 当前图片放大
+        slides[currentIndex].style.transform = `scale(1)`; //保持缩放为1
+        updateSlidePosition(); // 更新位置
+    }
+
+    function updateSlidePosition() {
+        const offset = -currentIndex * 100; // 计算当前位置
+        document.querySelector('.slides').style.transform = `translateX(${offset}%)`;
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides; // 移动到下一个
+        showSlides();
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // 移动到上一个
+        showSlides();
+    }
+
+    document.getElementById('next').addEventListener('click', nextSlide);
+    document.getElementById('prev').addEventListener('click', prevSlide);
+
+    // 自动播放
+    setInterval(nextSlide, 3000); // 每3秒自动切换
+
+    showSlides(); // 初始化
+
+    // ====================== 新增 Toast 提示组件 ====================== 
+const Toast = {
+  show: (message, isSuccess = true) => {
+    const toast = document.createElement('div');
+    toast.className = `custom-toast ${isSuccess ? 'success' : 'error'}`;
+    toast.innerHTML = `
+      <span>${isSuccess ? '✅' : '⚠️'}</span>
+      <p>${message}</p>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
+};
+
+// ====================== 预约核心逻辑 ======================
+const handleReserve = async (button) => {
+  const gameId = button.dataset.gameId;
+  const gameName = button.dataset.gameName;
+  const isReserved = button.textContent.includes('已预约');
+
+  try {
+    const response = await fetch('/api/reserve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      },
+      body: JSON.stringify({
+        gameId,
+        gameName,
+        action: isReserved ? 'remove' : 'add'
+      })
+    });
+    const data = await response.json();
+    // if (!response.ok) throw new Error('操作失败');
+    
+    // button.textContent = isReserved ? '立即预约' : '已预约';
+    // button.style.backgroundColor = isReserved ? '#6c757d' : '#ff6b6b';
+
+    if (data.success) {
+      // 更新按钮状态
+      button.textContent = isReserved ? '立即预约' : '已预约';
+      button.style.backgroundColor = isReserved ? '#6c757d' : '#ff6b6b';
+      Toast.show(isReserved ? `已取消预约 ${gameName}` : `成功预约 ${gameName}`);
+      // 更新预约数显示
+      const countElement = document.querySelector(`[data-game-id="${gameId}"]`);
+      if (countElement) {
+        countElement.textContent = `${data.reserve_count} 人预约`;
+      }
+    }
+  } catch (error) {
+    Toast.show(error.message || '网络错误，请重试', false);
+  }
+};
+
+// 初始化预约数============================================================
+async function initReserveCount() {
+  document.querySelectorAll('.reserve-count').forEach(async element => {
+    const gameId = element.dataset.gameId;
+    try {
+      const response = await fetch(`/api/game/reserve-count/${gameId}`);
+      const { reserve_count } = await response.json();
+      element.textContent = `${reserve_count} 人预约`;
+    } catch (error) {
+      console.error('初始化预约数失败:', error);
+    }
+  });
+}
+// ====================== 初始化按钮状态 ======================
+const initReserveButtons = async () => {
+  try {
+    const response = await fetch('/api/library', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+    
+    const { reservations } = await response.json();
+    document.querySelectorAll('.reserve-btn').forEach(button => {
+      const gameId = button.dataset.gameId;
+      const isReserved = reservations.some(r => r.id === gameId);
+      
+      if (isReserved) {
+        button.textContent = '已预约';
+        button.style.backgroundColor = '#ff6b6b';
+      }
+    });
+  } catch (error) {
+    Toast.show('初始化数据失败', false);
+  }
+};
+
+
+// 修改DOMContentLoaded事件
+document.addEventListener('DOMContentLoaded', () => {
+  initReserveButtons();
+  initReserveCount(); // 新增初始化
+  loadUserInfo();
+});
+
+// 在游戏卡片渲染时添加
+function renderGameCard(game) {
+  const card = document.createElement('div');
+  card.className = 'game-card';
+  card.innerHTML = `
+    <img src="${game.cover}" 
+         onmouseover="showGameDetail('${game.id}')"
+         onmouseout="hideGameDetail()">
+    <!-- 其他内容 -->
+  `;
+  return card;
+}
+
+// ====================== 事件绑定 ======================
+document.querySelectorAll('.reserve-btn').forEach(button => {
+  button.addEventListener('click', () => handleReserve(button));
+});
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', initReserveButtons);
+
+
+    const imageContainer = document.querySelector('.date3');
+    const hoverDiv = document.querySelector('.hover-div');
+    imageContainer.addEventListener('mouseover', function() {
+        hoverDiv.style.opacity = '1'; // 使<div>完全可见
+        hoverDiv.style.visibility = 'visible'; // 设置为可见
+    });
+    imageContainer.addEventListener('mouseout', function() {
+        hoverDiv.style.opacity = '0'; // 使<div>完全隐形
+        hoverDiv.style.visibility = 'hidden'; // 设置为不可见
+    });
+
+
+
+    const imgContainer = document.querySelector('.date3-1');
+    const hoverDiv2 = document.querySelector('.hover-div2');
+
+    imgContainer.addEventListener('mouseover', function() {
+        hoverDiv2.style.opacity = '1'; // 使<div>完全可见
+        hoverDiv2.style.visibility = 'visible'; // 设置为可见
+    });
+    imgContainer.addEventListener('mouseout', function() {
+        hoverDiv2.style.opacity = '0'; // 使<div>完全隐形
+        hoverDiv2.style.visibility = 'hidden'; // 设置为不可见
+    });
+
+
+
+    const imgContainer3 = document.querySelector('.date3-3');
+    const hoverDiv3 = document.querySelector('.hover-div3');
+
+    imgContainer3.addEventListener('mouseover', function() {
+        hoverDiv3.style.opacity = '1'; // 使<div>完全可见
+        hoverDiv3.style.visibility = 'visible'; // 设置为可见
+    });
+
+    imgContainer3.addEventListener('mouseout', function() {
+        hoverDiv3.style.opacity = '0'; // 使<div>完全隐形
+        hoverDiv3.style.visibility = 'hidden'; // 设置为不可见
+    });
+
+
+
+    const imgContainer4 = document.querySelector('.date3-4');
+    const hoverDiv4 = document.querySelector('.hover-div4');
+
+    imgContainer4.addEventListener('mouseover', function() {
+        hoverDiv4.style.opacity = '1'; // 使<div>完全可见
+        hoverDiv4.style.visibility = 'visible'; // 设置为可见
+    });
+
+    imgContainer4.addEventListener('mouseout', function() {
+        hoverDiv4.style.opacity = '0'; // 使<div>完全隐形
+        hoverDiv4.style.visibility = 'hidden'; // 设置为不可见
+    });
+
+
+
+    const imgContainer5 = document.querySelector('.date3-5');
+    const hoverDiv5 = document.querySelector('.hover-div5');
+
+    imgContainer5.addEventListener('mouseover', function() {
+        hoverDiv5.style.opacity = '1'; // 使<div>完全可见
+        hoverDiv5.style.visibility = 'visible'; // 设置为可见
+    });
+
+    imgContainer5.addEventListener('mouseout', function() {
+        hoverDiv5.style.opacity = '0'; // 使<div>完全隐形
+        hoverDiv5.style.visibility = 'hidden'; // 设置为不可见
+    });
+</script>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的游戏库</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="shouye.css">
+    <style>
+        .library-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .game-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #b8afaf;
+            margin-bottom: 20px;
+            border-bottom: 2px solid orange;
+            padding-bottom: 5px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            transform: translateY(0);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .game-card.load-in {
+            animation: cardEnter 0.6s ease forwards;
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .game-name {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .action-button {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .user-info {
+        padding: 15px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        text-align: right;
+    }
+    #username {
+        color: #ff6b6b;
+        font-weight: bold;
+    }
+            /* 增强取消按钮效果 */
+            .cancel-btn {
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cancel-btn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .cancel-btn:hover::after {
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 共用Header部分 -->
+    <header>
+            <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+            <div class="topbq">
+                <ul>
+                    <li><a href="shouye.html" class="top-bq">预约</a></li>
+                    <li><a href="#" class="top-bq">订阅</a></li>
+                    <li><a href="library.html" class="top-bq" style="color: orange">我的游戏库</a></li>
+                    <li><a href="#" class="top-bq">社区</a></li>
+                    <li><a href="#" class="top-bq">更多</a></li>
+                </ul>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="搜索..." style="height: 30px;width: 350px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;border: none;background: whitesmoke">
+                <button style="margin-left:-10px;height: 40px;width: 60px;border-bottom-right-radius:15px;border-top-right-radius:15px;border: none;background: whitesmoke;color: black ">搜索</button>
+            </div>
+            <div class="login">
+                <button style="background: darkorange;border-radius: 25px;height: 40px;width: 90px;border: none;color: white;margin-right:30px" 
+                        onclick="location.href='index.html'">退出</button>
+            </div>
+    </header>
+    <!-- 用户信息显示 -->
+
+    <div class="user-info">
+        <div class="user-panel">
+            <span>当前账号：<span id="username"></span></span>
+            <button onclick="showManagePanel()" class="manage-btn">管理订阅</button>
+        </div>
+    </div>
+        <div class="library-container">
+        <div class="game-section">
+            <h2 class="section-title">已预约游戏</h2>
+            <div class="game-grid" id="reserved-games"></div>
+        </div>
+
+        <div class="game-section">
+            <h2 class="section-title">已订阅游戏
+                <span class="badge" id="subscription-count">0</span>
+            </h2>
+            <div class="game-grid" id="subscribed-games">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+    <!-- 新增管理面板 -->
+    <div id="manage-panel" class="manage-panel">
+        <h3>批量管理</h3>
+        <button onclick="batchCancel('reserved')">清空预约</button>
+        <button onclick="batchCancel('subscribed')">清空订阅</button>
+    </div>
+</body>
+<script>
+            // 登录状态验证
+    if (!localStorage.getItem('authToken')) {
+        window.location.href = 'index.html';
+    }
+
+    // 动态显示用户名（需要后端支持）
+    async function loadUserInfo() {
+        try {
+            const response = await fetch('/api/user', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            const user = await response.json();
+            document.getElementById('username').textContent = user.username;
+        } catch (error) {
+            console.error('获取用户信息失败:', error);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', loadUserInfo);
+        async function loadLibrary() {
+            try {
+                const response = await fetch('/api/library', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                renderGames(data.reservations, 'reserved-games', '取消预约');
+                renderGames(data.subscriptions, 'subscribed-games', '取消订阅');
+            } catch (error) {
+                console.error('加载游戏库失败:', error);
+            }
+        }
+        function renderGames(games, containerId, buttonText) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+  
+            games.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.dataset.gameId = game.id;  // 添加数据标识
+            card.innerHTML = `
+        <img src="img/${game.image}" 
+           alt="${game.name}"
+           onerror="this.src='img/default.png'">
+        <div class="game-name">${game.name}</div>
+         <button class="cancel-btn" 
+               onclick="handleCancel('${game.id}', this)">
+          ${buttonText}
+          </button>
+             `;
+             container.appendChild(card);
+             });
+            }
+
+// 修改取消预约功能（约第60行）
+async function handleCancel(gameId, button) {
+  try {
+    const response = await fetch('/api/reserve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      },
+      body: JSON.stringify({
+        gameId,
+        action: 'remove'
+      })
+    });
+
+    if (response.ok) {
+      // 直接移除父级卡片元素
+      const card = button.closest('.game-card');
+      card.style.opacity = '0';
+      setTimeout(() => card.remove(), 300);
+      
+      // 添加删除动画
+      card.style.transition = 'opacity 0.3s ease';
+    }
+  } catch (error) {
+    console.error('取消失败:', error);
+    alert('取消操作失败，请重试');
+  }
+}
+
+        function showToast(message) {
+            // 复用预约页面的Toast实现
+        }
+
+        // 初始化加载
+        document.addEventListener('DOMContentLoaded', loadLibrary);
+</script>
+
+</html>

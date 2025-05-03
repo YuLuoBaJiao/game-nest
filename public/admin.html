@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>游戏审核</title>
+    <style>
+        .game-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+        }
+        .game-cover {
+            max-width: 200px;
+            max-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>待审核游戏</h1>
+    <div id="pendingList"></div>
+
+    <script>
+        async function loadPendingGames() {
+            try {
+                const response = await fetch('/api/games/pending', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                const games = await response.json();
+                
+                const container = document.getElementById('pendingList');
+                games.forEach(game => {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    card.innerHTML = `
+                        <h3>${game.title}</h3>
+                        <img src="${game.cover}" class="game-cover">
+                        <p>${game.description}</p>
+                        <p>类型：${game.type === 'reserve' ? '预约' : '订阅'}</p>
+                        <button onclick="approveGame(${game.id})">通过</button>
+                        <button onclick="rejectGame(${game.id})">拒绝</button>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('加载失败:', error);
+            }
+        }
+
+        async function approveGame(id) {
+            try {
+                await fetch(`/api/games/${id}/approve`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                alert('审核通过！');
+                location.reload();
+            } catch (error) {
+                console.error('操作失败:', error);
+            }
+        }
+
+        // 加载时执行
+        window.onload = loadPendingGames;
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+const express = require('express');       // Express框架
+const cors = require('cors');             // 跨域支持
+const bodyParser = require('body-parser');// 解析请求体
+const bcrypt = require('bcryptjs');       // 密码加密
+const jwt = require('jsonwebtoken');      // 令牌生成
+const pool = require('./db');             // 数据库连接
+
+// 创建 Express 应用实例
+const app = express();
+const PORT = 3306;
+
+// 应用中间件
+app.use(cors());           // 允许所有跨域请求
+app.use(bodyParser.json());// 自动解析 JSON 格式请求体
+app.use(express.static('public')); // 托管前端静态文件
+
+// 用户登录接口
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  
+  try {
+      // 1. 参数验证
+      if (!username || !password) {
+          return res.status(400).json({ 
+              code: 'MISSING_PARAMS',
+              message: '用户名和密码不能为空'
+          });
+      }
+
+      // 2. 查询数据库（使用参数化查询防止SQL注入）
+      const [users] = await pool.query(
+          'SELECT id, username, password FROM users WHERE username = ?',
+          [username]
+      );
+
+      // 3. 用户不存在
+      if (users.length === 0) {
+          console.log(`登录失败：用户名 ${username} 不存在`);
+          return res.status(401).json({
+              code: 'USER_NOT_FOUND',
+              message: '用户名或密码错误' // 模糊提示增强安全性
+          });
+      }
+
+      // 4. 密码验证
+      const user = users[0];
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) {
+          console.log(`登录失败：用户 ${username} 密码错误`);
+          return res.status(401).json({
+              code: 'INVALID_CREDENTIALS',
+              message: '用户名或密码错误'
+          });
+      }
+
+      // 5. 生成令牌
+      const token = jwt.sign(
+          { userId: user.id },
+          'your_secure_key_here', // 建议使用环境变量存储
+          { expiresIn: '2h' }
+      );
+
+      // 6. 成功响应
+      res.json({
+          code: 'SUCCESS',
+          data: {
+              token,
+              redirectUrl: '/library.html' // 明确指定跳转地址
+          }
+      });
+
+  } catch (error) {
+      console.error('登录错误:', error);
+      res.status(500).json({
+          code: 'SERVER_ERROR',
+          message: '服务器内部错误，请稍后再试'
+      });
+  }
+});
+// 启动服务器
+app.listen(PORT, () => {
+    console.log(`🛡️ 服务器运行在 http://localhost:${PORT}`);
+  });

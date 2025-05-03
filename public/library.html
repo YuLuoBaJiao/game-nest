@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的游戏库</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="shouye.css">
+    <style>
+        /* 修复导航栏遮挡问题 */
+        body {
+            padding-top: 95px; /* 根据实际导航栏高度调整 */
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 75px; /* 调整导航栏实际高度 */
+            z-index: 1000;
+            background: black;
+            padding: 5px 0;
+        }
+
+        .library-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .game-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #b8afaf;
+            margin-bottom: 20px;
+            border-bottom: 2px solid orange;
+            padding-bottom: 5px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .game-card.loaded {
+            opacity: 1;
+            animation: cardEnter 0.6s ease forwards;
+        }
+
+        @keyframes cardEnter {
+            from { transform: translateY(20px); }
+            to { transform: translateY(0); }
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .game-name {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .cancel-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-info {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .user-panel {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .manage-btn {
+            background: #ff4500;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .badge {
+            background: #ff4500;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .empty-tip {
+            text-align: center;
+            color: #666;
+            padding: 40px 0;
+            grid-column: 1 / -1;
+        }
+
+        .manage-panel {
+            position: fixed;
+            bottom: -100px;
+            right: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .manage-panel.show {
+            bottom: 30px;
+        }
+        .management-bar {
+          margin: 15px 0;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          background: white;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          padding: 15px;
+          z-index: 100;
+        }
+
+        .tag-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 10px;
+        }
+
+        .tag-item {
+          background: #f0f0f0;
+          padding: 5px 10px;
+          border-radius: 15px;
+          cursor: pointer;
+        }
+
+        .tag-item.selected {
+          background: #ff6b6b;
+          color: white;
+        }
+
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+          background: white;
+          width: 60%;
+          margin: 50px auto;
+          padding: 20px;
+        }
+          /* 更多 */
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0,0,0,0.9);
+    border-radius: 8px;
+    padding: 10px 0;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.dropdown-container:hover .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+.dropdown-item {
+    color: white;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.dropdown-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+.dev-item {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    margin-top: 8px;
+    padding-top: 8px;
+}
+.dev-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* 错误提示框 */
+/* 权限提示优化 */
+#accessDeniedToast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 20px 40px;
+    border-radius: 10px;
+    z-index: 9999;
+    display: none;
+    animation: shake 0.5s;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+    font-size: 16px;
+    text-align: center;
+}
+
+@keyframes shake {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    25% { transform: translate(-50%, -50%) rotate(5deg); }
+    50% { transform: translate(-50%, -50%) rotate(-5deg); }
+    75% { transform: translate(-50%, -50%) rotate(3deg); }
+    100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+        <div class="topbq">
+            <ul>
+                <li><a href="shouye.html" class="top-bq">预约</a></li>
+                <li><a href="ceshi.html" class="top-bq">订阅</a></li>
+                <li><a href="library.html" class="top-bq" style="color: orange">我的游戏库</a></li>
+                <li><a href="#" class="top-bq">社区</a></li>
+                <li class="dropdown-container">
+                  <a href="#" class="top-bq">更多 ▼</a>
+                  <div class="dropdown-menu">
+                      <div class="dropdown-item" onclick="showNotifications()">📩 通知</div>
+                      <div class="dropdown-item" onclick="showSettings()">⚙️ 设置</div>
+                      <!-- 开发者专属 -->
+                      <div class="dev-item" onclick="checkDeveloperAccess(event)">💻 开发者中心</div>
+                  </div>
+              </li>
+            </ul>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="搜索..." style="height: 30px;width: 350px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;border: none;background: whitesmoke">
+            <button style="margin-left:-10px;height: 40px;width: 60px;border-bottom-right-radius:15px;border-top-right-radius:15px;border: none;background: whitesmoke;color: black ">搜索</button>
+        </div>
+        <div class="login">
+            <button style="background: darkorange;border-radius: 25px;height: 40px;width: 90px;border: none;color: white;margin-right:30px" 
+                    onclick="location.href='index.html'">退出</button>
+        </div>
+    </header>
+
+    <div class="user-info">
+        <div class="user-panel">
+            <span>当前账号：<span id="username"></span></span>
+            <!-- <button onclick="showManagePanel()" class="manage-btn">管理游戏库</button> -->
+        </div>
+    </div>
+
+    <div class="library-container">
+        <div class="game-section">
+            <h2 class="section-title">已预约游戏
+                           <!-- 在section-title下方添加 -->
+            <div class="management-bar">
+               <div class="sort-filter">
+                 <button class="manage-btn" onclick="toggleDropdown(this)">管理此区域 ▼</button></div>
+                 <div class="dropdown-menu">
+                   <div class="sort-options">
+                     <label>排序方式：
+                       <select onchange="updateSort(this.value)">
+                         <option value="time_desc">最新入库</option>
+                         <option value="time_asc">最早入库</option>
+                         <option value="name_asc">名称A-Z</option>
+                         <option value="name_desc">名称Z-A</option>
+                       </select>
+                     </label>
+                   </div>
+                   <div class="tag-filter">
+                     <button onclick="toggleTagFilter()">标签筛选 ▼</button>
+                     <div class="tag-container hidden"></div>
+                   </div>
+                   <button class="custom-zone-btn" onclick="showCustomZoneForm()">
+                     创建自定义区域
+                   </button>
+                 </div>
+               
+             </div>
+
+             <!-- 添加自定义区域表单 -->
+             <div id="customZoneModal" class="modal hidden">
+               <div class="modal-content">
+                 <span class="close" onclick="closeModal()">&times;</span>
+                 <h3>创建自定义区域</h3>
+                 <input type="text" id="zoneName" placeholder="区域名称">
+                 <div class="game-selector">
+                   <!-- 动态加载游戏 -->
+                 </div>
+                 <button onclick="saveCustomZone()">保存</button>
+               </div>
+             </div>
+                <span class="badge" id="reservation-count">0</span>
+            </h2>
+            <div class="game-grid" id="reserved-games"></div>
+        </div>
+
+        <div class="game-section">
+            <h2 class="section-title">已订阅游戏
+                            <!-- 在section-title下方添加 -->
+            <div class="management-bar">
+                <div class="sort-filter">
+                  <button class="manage-btn" onclick="toggleDropdown(this)">管理此区域 ▼</button>
+                  <div class="dropdown-menu">
+                    <div class="sort-options">
+                      <label>排序方式：
+                        <select onchange="updateSort(this.value)">
+                          <option value="time_desc">最新入库</option>
+                          <option value="time_asc">最早入库</option>
+                          <option value="name_asc">名称A-Z</option>
+                          <option value="name_desc">名称Z-A</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="tag-filter">
+                      <button onclick="toggleTagFilter()">标签筛选 ▼</button>
+                      <div class="tag-container hidden"></div>
+                    </div>
+                    <button class="custom-zone-btn" onclick="showCustomZoneForm()">
+                      创建自定义区域
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 添加自定义区域表单 -->
+              <div id="customZoneModal" class="modal hidden">
+                <div class="modal-content">
+                  <span class="close" onclick="closeModal()">&times;</span>
+                  <h3>创建自定义区域</h3>
+                  <input type="text" id="zoneName" placeholder="区域名称">
+                  <div class="game-selector">
+                    <!-- 动态加载游戏 -->
+                  </div>
+                  <button onclick="saveCustomZone()">保存</button>
+                </div>
+              </div>
+                <span class="badge" id="subscription-count">0</span>
+            </h2>
+            <div class="game-grid" id="subscribed-games"></div>
+        </div>
+    </div>
+    <div id="accessDeniedToast" style="display: none;">
+      当前账号无开发者权限！
+    </div>
+  </body>
+    <script>
+    // 登录状态验证
+    if (!localStorage.getItem('authToken')) {
+        window.location.href = 'index.html';
+    }
+
+    // 动态显示用户名（改进版）
+    async function loadUserInfo() {
+        try {
+            const response = await fetch('/api/user', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            
+            // 添加响应状态检查
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const user = await response.json();
+            
+            // 调试输出
+            console.log('获取用户信息成功：', user);
+            
+            // 确保数据有效性
+            if (user && user.username) {
+                document.getElementById('username').textContent = user.username;
+            } else {
+                console.error('无效的用户数据：', user);
+                showToast('用户信息获取失败', false);
+            }
+        } catch (error) {
+            console.error('获取用户信息失败:', error);
+            showToast('用户信息加载失败，请重新登录', false);
+            // 清除无效token并跳转登录
+            localStorage.removeItem('authToken');
+            setTimeout(() => window.location.href = 'index.html', 2000);
+        }
+    }
+        // 加载游戏库数据
+        async function loadLibrary() {
+            try {
+                const response = await fetch('/api/library', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('reservation-count').textContent = data.reservations.length;
+                document.getElementById('subscription-count').textContent = data.subscriptions.length;
+                
+                renderEnhancedGames(data.reservations, 'reserved-games', '取消预约');
+                renderEnhancedGames(data.subscriptions, 'subscribed-games', '取消订阅');
+
+                setTimeout(() => {
+                    document.querySelectorAll('.game-card').forEach(card => {
+                        card.classList.add('loaded');
+                    });
+                }, 100);
+            } catch (error) {
+                console.error('加载游戏库失败:', error);
+                showToast('数据加载失败，请刷新重试', false);
+            }
+        }
+
+        // 增强版游戏渲染
+        function renderEnhancedGames(games, containerId, buttonText) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = games.length ? '' : '<div class="empty-tip">暂时没有内容哦~</div>';
+            
+            games.forEach((game, index) => {
+                const card = document.createElement('div');
+                card.className = `game-card`;
+                card.innerHTML = `
+                    <img src="img/${game.image}" 
+                         alt="${game.name}"
+                         onerror="this.onerror=null;this.src='img/default.png'">
+                    <div class="game-meta">
+                        <h3 class="game-name">${game.name}</h3>
+                    </div>
+                    <button class="cancel-btn" 
+                            onclick="handleEnhancedCancel('${game.id}', this, '${containerId}')"
+                            data-game-type="${containerId === 'subscribed-games' ? 'subscription' : 'reservation'}">
+                        ${buttonText}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 增强取消功能（修复状态同步）
+        async function handleEnhancedCancel(gameId, button, containerId) {
+            const gameType = button.dataset.gameType;
+            
+            try {
+                const response = await fetch(`/api/${gameType === 'subscription' ? 'subscribe' : 'reserve'}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        gameId,
+                        action: 'remove'
+                    })
+                });
+
+                if (response.ok) {
+                    // 更新本地计数
+                    const countElement = document.getElementById(`${gameType === 'subscription' ? 'subscription' : 'reservation'}-count`);
+                    countElement.textContent = parseInt(countElement.textContent) - 1;
+                    
+                    // 移除动画
+                    const card = button.closest('.game-card');
+                    card.style.transform = 'scale(0.9)';
+                    card.style.opacity = '0';
+                    setTimeout(() => card.remove(), 300);
+                    
+                    // 触发全局状态更新
+                    localStorage.setItem('gameUpdate', JSON.stringify({
+                        type: gameType,
+                        action: 'remove',
+                        gameId,
+                        timestamp: Date.now()
+                    }));
+                    
+                    showToast(`已取消${gameType === 'subscription' ? '订阅' : '预约'}`, true);
+                }
+            } catch (error) {
+                console.error('操作失败:', error);
+                showToast('操作失败，请重试', false);
+            }
+        }
+
+
+        // 显示管理面板
+        function toggleDropdown() {
+            const panel = document.getElementById('manage-panel');
+            panel.classList.toggle('show');
+        }
+
+        // Toast提示
+        function showToast(message, isSuccess = true) {
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${isSuccess ? 'success' : 'error'}`;
+            toast.innerHTML = `
+                <span>${isSuccess ? '✅' : '⚠️'}</span>
+                <p>${message}</p>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 状态同步监听
+        function initStateSync() {
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'gameUpdate') {
+                    const updateData = JSON.parse(event.newValue);
+                    if (updateData.action === 'remove') {
+                        // 处理单个取消
+                        const card = document.querySelector(`[data-game-id="${updateData.gameId}"]`);
+                        if (card) card.remove();
+                    }
+                    loadLibrary();
+                }
+            });
+        }
+  // 修改检查开发者权限的方法
+  function checkDeveloperAccess(event) {
+    event.preventDefault();
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+        showCustomAlert('⚠️ 请先登录', '您需要登录后才能访问开发者中心');
+        return;
+    }
+
+    fetch('/api/check-developer', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+        if (response.status === 200) {
+            window.location.href = 'kaifa.html';
+        } else if (response.status === 403) {
+            showAccessDeniedToast(); // 新增专用提示方法
+        } else {
+            showCustomAlert('错误', '未知错误，状态码：' + response.status);
+        }
+    })
+    .catch(error => {
+        console.error('权限验证失败:', error);
+        showCustomAlert('错误', '网络连接异常，请稍后重试');
+    });
+}
+
+// 新增专用权限提示
+function showAccessDeniedToast() {
+    const toast = document.getElementById('accessDeniedToast');
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2000);
+}
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+            loadLibrary();
+            initStateSync();
+        });
+        // 自定义
+        let currentZoneType = ''; // 'reserve' 或 'subscribe'
+
+// 初始化标签筛选
+async function initTagFilter() {
+  const res = await fetch('/api/tags');
+  const tags = await res.json();
+  const container = document.querySelector('.tag-container');
+  
+  tags.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.className = 'tag-item';
+    btn.textContent = tag.name;
+    btn.onclick = () => toggleTag(tag.id);
+    container.appendChild(btn);
+  });
+}
+
+// 更新排序
+function updateSort(value) {
+  const [sortField, order] = value.split('_');
+  loadGames(currentZoneType, { 
+    sort: sortField, 
+    order: order.toUpperCase() 
+  });
+}
+
+// 自定义区域管理
+async function showCustomZoneForm() {
+  const res = await fetch(`/api/${currentZoneType}-games`);
+  const games = await res.json();
+  
+  const selector = document.querySelector('.game-selector');
+  selector.innerHTML = games.map(game => `
+    <label>
+      <input type="checkbox" value="${game.id}">
+      ${game.name}
+    </label>
+  `).join('');
+  
+  document.getElementById('customZoneModal').classList.remove('hidden');
+}
+
+async function saveCustomZone() {
+  const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')]
+    .map(input => input.value);
+  
+  await fetch('/api/custom-zones', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    },
+    body: JSON.stringify({
+      name: document.getElementById('zoneName').value,
+      type: currentZoneType,
+      gameIds: selected
+    })
+  });
+  
+  closeModal();
+  loadLibrary();
+}
+
+    </script>
+
+</html>

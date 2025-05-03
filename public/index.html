@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>这算啥呢。。仿写游戏网页</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+    <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+    <div class="login">
+        <button style="background: darkorange;border-radius: 25px;height: 40px;width: 90px;border: none;color: white;margin-right:30px" id="showLoginBtn">登录</button>
+    </div>
+</header>
+<video autoplay muted loop>
+    <source src="./video/WeGame_.mp4" type="video/mp4">
+</video>
+<main>
+    <div>
+        <div id="loginBox">
+            <p class="login1">登录</p>
+            <div class="text1">
+                <div class="loginimg1"></div><input type="text" class="login2" placeholder="QQ/邮箱"></div><br>
+            <div class="text2">
+                <div class="loginimg2"></div><input type="password" class="login3" placeholder="请输入密码"></div><br>
+            <div class="login4">
+                <div class="mima"> <input type="checkbox" value="记住密码"><font color="#f5f5f5">记住密码</font></div>
+                <div class="zhuce"><a href="" class="zhuce1">无法登录</a></div>
+            </div>
+            <div class="login5">
+                <button id="loginBtn" style="text-decoration: none;color: white">登录</button>
+                <div id="errorMsg" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+    <div id="registerBox" style="display: none;"> <!-- 强制初始隐藏 -->
+        <p class="reg1">注册</p>
+        <label>
+            <input type="radio" name="role" value="user" checked>
+            <div class="role-card">
+              <div class="role-icon">👤</div>
+              <h3>普通玩家</h3>
+              <p>浏览和体验游戏内容</p>
+            </div>
+          </label>
+          
+          <label>
+            <input type="radio" name="role" value="developer">
+            <div class="role-card developer">
+              <div class="role-icon">👨💻</div>
+              <h3>游戏开发者</h3>
+              <p>发布和管理游戏内容</p>
+            </div>
+          </label>
+        <div class="text1">
+            <div class="loginimg1"></div>
+            <input type="text" class="reg-user" placeholder="用户名">
+        </div>
+        <div class="text2">
+            <div class="loginimg2"></div>
+            <input type="password" class="reg-pwd" placeholder="密码">
+        </div><br>
+        <div class="login4">
+            <div class="mima"><font color="#f5f5f5">已有账号？</font></div>
+            <div class="denglu"><a href="#" class="denglu1 switch-login">立即登录</a></div>
+        </div>
+        <div class="login5">
+            <button id="regBtn">注册</button>
+            <div id="regErrorMsg" class="error-message"></div>
+        </div>
+    </div>
+</main>
+<div id="successToast" class="toast-hidden">
+    <div class="toast-content">
+        <span>🎉 注册成功！</span>
+    </div>
+</div>
+</body>
+<script>
+    // 在所有其他代码之前添加路径标准化
+(function fixPath() {
+    if (window.location.pathname === '/' && 
+        !window.location.href.includes('index.html')) {
+        window.history.replaceState(null, '', '/index.html');
+    }
+})();
+ // 初始化隐藏登录框
+ document.getElementById('loginBox').style.display = 'none';
+
+
+    // 新增登录功能
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+    const username = document.querySelector('.login2').value.trim();
+    const password = document.querySelector('.login3').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    
+    // 清空旧消息
+    errorMsg.style.color = '#ff4444'; // 新增：强制红色
+    errorMsg.textContent = '';
+    errorMsg.style.display = 'none';
+
+    try {
+        // 1. 前端验证
+        if (!username || !password) {
+            throw new Error('请输入用户名和密码');
+            // 抖动动画提示
+            errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+            window.errorTimer = setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 2000);
+            
+            setTimeout(() => errorMsg.style.animation = '', 500);
+        }
+
+        // 2. 发送请求
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        // 3. 处理响应
+        if (response.ok) {
+            localStorage.setItem('authToken', result.data.token);
+            window.location.href = 'shouye.html'; // 动态跳转
+
+        } else {
+            errorMsg.textContent = result.message;
+            errorMsg.style.display = 'block';
+            // 抖动动画提示
+            errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+            window.errorTimer = setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 2000);
+            
+            setTimeout(() => errorMsg.style.animation = '', 500);
+        }
+    } catch (error) {
+        errorMsg.style.color = '#ff4444'; // 新增
+        errorMsg.textContent = error.message || '网络连接失败，请检查网络';
+        errorMsg.style.display = 'block';
+
+        // 新增自动消失逻辑
+        errorMsg.style.animation = 'shake 0.5s';
+        setTimeout(() => errorMsg.style.animation = '', 500);
+        window.errorTimer = setTimeout(() => {
+        errorMsg.style.display = 'none';
+        }, 2000);
+    }
+    setTimeout(() => errorMsg.style.animation = '', 500);
+});
+
+// 登陆状态验证
+
+
+
+// 修改后的登录状态验证（约第140行）
+if (!localStorage.getItem('authToken') && 
+    window.location.pathname !== '/index.html' && 
+    window.location.pathname !== '/') {
+    window.location.href = '/index.html';
+}
+// 改进的切换函数
+function toggleForms(hideId, showId) {
+    if (hideId) {
+        const hideElement = document.getElementById(hideId);
+        hideElement.style.opacity = 0;
+        setTimeout(() => {
+            hideElement.style.display = 'none';
+        }, 300);
+    }
+
+    const showElement = document.getElementById(showId);
+    showElement.style.display = 'block';
+    setTimeout(() => {
+        showElement.style.opacity = 1;
+    }, 50);
+}
+
+// 界面切换事件绑定
+document.querySelector('a.zhuce1').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms('loginBox', 'registerBox');
+    document.getElementById('errorMsg').style.display = 'none';
+                            // 清空登录信息
+            document.querySelector('.login2').value = '';
+            document.querySelector('.login3').value = '';
+});
+
+document.querySelector('.switch-login').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms('registerBox', 'loginBox');
+                // 清空注册信息
+            document.querySelector('.reg-user').value = '';
+            document.querySelector('.reg-pwd').value = '';
+});
+
+// 顶部登录按钮事件
+document.getElementById('showLoginBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleForms(null, 'loginBox');
+});
+
+// 注册功能（修改后）
+// 修改注册功能部分
+document.getElementById('regBtn').addEventListener('click', async () => {
+    const username = document.querySelector('.reg-user').value.trim();
+    const password = document.querySelector('.reg-pwd').value.trim();
+    const role = document.querySelector('input[name="role"]:checked').value;
+    const errorMsg = document.getElementById('regErrorMsg');
+
+    errorMsg.textContent = '';
+    errorMsg.style.display = 'none';
+
+    try {
+        if (!/^[a-zA-Z0-9]{4,16}$/.test(username)) {
+            errorMsg.textContent = '用户名需4-16位字母数字';
+            errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'shake 0.5s';
+        return;
+    }
+
+    if (password.length < 8) {
+        errorMsg.textContent = '密码至少8位';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+        if (!username || !password) {
+            throw new Error('用户名和密码不能为空');
+        }
+
+        const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, role }) // 包含role参数
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // 显示成功弹窗并切换界面
+            const toast = document.getElementById('successToast');
+            toast.style.opacity = 1;
+            toast.style.visibility = 'visible';
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                toast.style.visibility = 'hidden';
+            }, 3000);
+
+            toggleForms('registerBox', 'loginBox');
+            
+            // 清空注册信息
+            document.querySelector('.reg-user').value = '';
+            document.querySelector('.reg-pwd').value = '';
+            
+            // 在登录框显示成功提示
+            const loginErrorMsg = document.getElementById('errorMsg');
+            // loginErrorMsg.style.color = 'green';
+            // loginErrorMsg.textContent = '注册成功，请登录';
+            loginErrorMsg.style.display = 'block';
+        } else {
+            errorMsg.textContent = result.message;
+            errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+            window.errorTimer = setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 2000);
+            
+            setTimeout(() => errorMsg.style.animation = '', 500);
+        }
+    } catch (error) {
+        errorMsg.textContent = error.message || '注册失败，请重试';
+        errorMsg.style.display = 'block';
+        errorMsg.style.animation = 'shake 0.5s';
+            setTimeout(() => errorMsg.style.animation = '', 500);
+            window.errorTimer = setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 2000);
+            
+    }
+});
+if (!window.localStorage) {
+  alert("请升级浏览器或禁用隐私模式");
+}
+document.querySelectorAll('.role-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+    });
+});
+</script>
+</html>
