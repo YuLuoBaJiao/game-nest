@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');// 解析请求体
 // const bcrypt = require('bcryptjs');       // 密码加密
 const jwt = require('jsonwebtoken');      // 令牌生成
 const pool = require('./db');             // 数据库连接
-
 // 创建 Express 应用实例
 const app = express();
 const PORT = 3000;
@@ -113,18 +112,11 @@ try {
         message: '注册失败'
     });
 }
-// const [result] = await pool.query(
-//   'INSERT INTO users SET ?', 
-//   { username, password, role: role || 'user' }
-// );
 
-// // 如果是开发者发送欢迎邮件
-// if(role === 'developer') {
-//   sendDeveloperWelcomeEmail(username);
-// }
 
 });
-// 开发者权限
+
+// ========================开发者权限=======================================
 app.get('/api/check-developer', authenticateToken, async (req, res) => {
   try {
       const [users] = await pool.query(
@@ -162,9 +154,13 @@ app.post('/api/reserve', authenticateToken, async (req, res) => {
 // 事务处理保证数据一致性
     await pool.query('START TRANSACTION');
     if (action === 'add') {
+      const [[{ maxTime }]] = await pool.query(
+        'SELECT MAX(time) as maxTime FROM reservations WHERE user_id = ?',
+        [userId]
+      );
       await pool.query(
-        'INSERT INTO reservations (user_id, game_id, game_name) VALUES (?, ?, ?)',
-        [userId, gameId, gameName] // 使用传入的gameName
+        'INSERT INTO reservations (user_id, game_id, game_name, time) VALUES (?, ?, ?, ?)', // 新增time字段
+        [userId, gameId, gameName, (maxTime || 0) + 1] // 序号递增
       );
       // 增加预约计数
       await pool.query(
@@ -179,7 +175,7 @@ app.post('/api/reserve', authenticateToken, async (req, res) => {
             
       // 减少预约计数
       await pool.query(
-        'UPDATE games SET reserve_count = reserve_count - 1 WHERE game_id = ?',
+        'UPDATE games SET reserve_count = GREATEST(reserve_count - 1, 0) WHERE game_id = ?',
         [gameId]
       );
     }
@@ -220,9 +216,14 @@ app.post('/api/subscribe', authenticateToken, async (req, res) => {
 
   try {
     if (action === 'add') {
+      const [[{ maxTime }]] = await pool.query(
+        'SELECT MAX(time) as maxTime FROM subscriptions WHERE user_id = ?',
+        [userId]
+      );
+      
       await pool.query(
-        'INSERT INTO subscriptions (user_id, game_id, game_name) VALUES (?, ?, ?)',
-        [userId, gameId, gameName] // 使用参数传递的gameName
+        'INSERT INTO subscriptions (user_id, game_id, game_name, time) VALUES (?, ?, ?, ?)',
+        [userId, gameId, gameName, (maxTime || 0) + 1]
       );
     } else {
       await pool.query(
@@ -247,16 +248,24 @@ app.post('/api/subscribe', authenticateToken, async (req, res) => {
 
 // 获取用户游戏库数据
 app.get('/api/library', authenticateToken, async (req, res) => {
-  const userId = req.user.userId;
-
+    const userId = req.user.userId;
+    // 获取预约游戏的排序字段和顺序
+    const yuyueSortField = req.query.yuyueSortField || 'time';
+    const yuyueSortOrder = req.query.yuyueSortOrder || 'desc';
+    // 获取订阅游戏的排序字段和顺序
+    const dingyueSortField = req.query.dingyueSortField || 'time';
+    const dingyueSortOrder = req.query.dingyueSortOrder || 'desc';
   try {
     const [reservations] = await pool.query(
       `SELECT 
         game_id AS id,
         game_name AS name,
-        CONCAT('yuyue', SUBSTRING(game_id, 5), '.png') AS image 
+        time, 
+        CONCAT('yuyue', SUBSTRING(game_id, 5), '.png') AS image,
+        time
        FROM reservations 
-       WHERE user_id = ?`,
+       WHERE user_id = ?
+       ORDER BY ${yuyueSortField} ${yuyueSortOrder}`,
       [userId]
     );
     
@@ -264,9 +273,12 @@ app.get('/api/library', authenticateToken, async (req, res) => {
       `SELECT 
         game_id AS id,
         game_name AS name,
-        CONCAT('dingyue', SUBSTRING(game_id, 5), '.png') AS image 
+        time, 
+        CONCAT('dingyue', SUBSTRING(game_id, 5), '.png') AS image,
+        time
        FROM subscriptions 
-       WHERE user_id = ?`,
+       WHERE user_id = ?
+       ORDER BY ${dingyueSortField} ${dingyueSortOrder}`,
       [userId]
     );
 
@@ -274,12 +286,14 @@ app.get('/api/library', authenticateToken, async (req, res) => {
       reservations: reservations.map(r => ({
         id: r.id,
         name: r.name,
-        image: r.image
+        image: r.image,
+        time:r.time
       })),
       subscriptions: subscriptions.map(s => ({
         id: s.id,
         name: s.name,
-        image: s.image
+        image: s.image,
+        time:s.time
       }))
     });
   } catch (error) {
@@ -287,22 +301,7 @@ app.get('/api/library', authenticateToken, async (req, res) => {
     res.status(500).json({ error: '服务器错误' });
   }
 });
-// 批量删除接口
-app.delete('/api/:type/batch', authenticateToken, async (req, res) => {
-  const { type } = req.params;
-  const table = type === 'subscribe' ? 'subscriptions' : 'reservations';
-  
-  try {
-      await pool.query(
-          `DELETE FROM ${table} WHERE user_id = ?`,
-          [req.user.userId]
-      );
-      res.json({ success: true });
-  } catch (error) {
-      console.error(`批量删除${type}失败:`, error);
-      res.status(500).json({ success: false });
-  }
-});
+
 // 认证中间件
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -367,93 +366,38 @@ function checkDeveloperAccess(event) {
       showCustomAlert('错误', '权限验证失败，请检查网络');
   });
 }
-
-// 通用弹窗组件
-function showCustomAlert(title, message) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = 'custom-alert';
-  alertDiv.innerHTML = `
-      <div class="alert-content">
-          <h3>${title}</h3>
-          <p>${message}</p>
-          <button onclick="this.parentElement.parentElement.remove()">确定</button>
-      </div>
-  `;
-  document.body.appendChild(alertDiv);
-}
-
-
-
-// 新增接口 - 获取所有标签
-app
-.get('/api/tags', async (req, res) => {
+// ========================详情页面评论==============================
+// 获取评论
+app.get('/api/comments/:gameId', async (req, res) => {
   try {
-    const [tags] = await pool.query('SELECT * FROM tags');
-    res
-.json(tags);
+      const [comments] = await pool.query(
+          'SELECT * FROM comments WHERE game_id = ? ORDER BY created_at DESC',
+          [req.params.gameId]
+      );
+      res.json(comments);
   } catch (error) {
-    res
-.status(500).json({ error: '获取标签失败' });
+      res.status(500).json({ error: '获取评论失败' });
   }
 });
-// 新增接口 - 获取游戏详情
-app
-.get('/api/game/:id', async (req, res) => {
+
+// 提交评论
+app.post('/api/comments', authenticateToken, async (req, res) => {
   try {
-    const [game] = await pool.query(
-      `
-SELECT g.*, GROUP_CONCAT(t.name) AS tags
-       FROM games g
-       LEFT JOIN game_tags gt ON g.game_id = gt.game_id
-       LEFT JOIN tags t ON gt.tag_id = t.id
-       WHERE g.game_id = ?
-       GROUP BY g.game_id
-`,
-      [req.params.id]
-    );
-    res
-.json(game[0]);
+      const { gameId, content } = req.body;
+      const [result] = await pool.query(
+          'INSERT INTO comments (game_id, user_id, content) VALUES (?, ?, ?)',
+          [gameId, req.user.userId, content]
+      );
+      res.json({ success: true, commentId: result.insertId });
   } catch (error) {
-    res
-.status(500).json({ error: '获取失败' });
+      res.status(500).json({ error: '提交评论失败' });
   }
 });
-// 修改游戏提交接口
-app.post('/api/submit-game', authenticateToken, async (req, res) => {
-  const { title, desc, tags, type, cover } = req.body;
-  
-  // 生成游戏ID
-  const gameType = type === 'reserve' ? 'yy' : 'dy';
-  const [maxId] = await pool.query(
-    `SELECT MAX(CAST(SUBSTRING(game_id, 3) AS UNSIGNED) AS max 
-     FROM games WHERE type = ?`, 
-    [type]
-  );
-  const newId = maxId[0].max ? maxId[0].max + 1 : 1;
-  const gameId = `${gameType}${newId.toString().padStart(4, '0')}`;
 
-  try {
-    // 插入游戏
-    await pool.query(
-      `INSERT INTO games 
-      (game_id, title, description, cover, type, developer) 
-      VALUES (?, ?, ?, ?, ?, ?)`,
-      [gameId, title, desc, cover, type, req.user.username]
-    );
 
-    // 插入标签
-    const tagInserts = tags.map(tagId => 
-      pool.query('INSERT INTO game_tags (game_id, tag_id) VALUES (?, ?)', 
-      [gameId, tagId])
-    );
-    await Promise.all(tagInserts);
+// // 管理员界面===================================================
 
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: '提交失败' });
-  }
-});
-// 启动服务器
+// 启动服务器==========================================================
 app.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
 });

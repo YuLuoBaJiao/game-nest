@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员后台管理</title>
+    <link rel="stylesheet" href="./admin_management.css">
+</head>
+
+<body>
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+        <!-- 管理员头像和名称 -->
+        <div class="admin-info">
+            <img src="img/admin_avatar.png" alt="管理员头像">
+            <p>管理员名称</p>
+        </div>
+        <!-- 导航栏栏目 -->
+        <ul class="nav-links">
+            <li><a href="#" onclick="showPage('user-account-management')">用户账号管理</a></li>
+            <li><a href="#" onclick="showPage('user-reservation-info')">用户游戏预约信息查看</a></li>
+            <li><a href="#" onclick="showPage('user-subscription-info')">用户游戏订阅查看</a></li>
+            <li><a href="#" onclick="showPage('game-review')">开发者投递的游戏审核</a></li>
+        </ul>
+    </div>
+    <!-- 右侧内容区域 -->
+    <div class="content">
+        <!-- 用户账号管理页面 -->
+        <div id="user-account-management" class="page">
+            <h2>用户账号管理</h2>
+            <table id="user-account-table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>用户名</th>
+                        <th>用户角色</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格内容将通过 JavaScript 动态添加 -->
+                </tbody>
+            </table>
+            <!-- 分页按钮 -->
+            <div class="pagination">
+                <button onclick="prevPage('user-account-table')">上一页</button>
+                <button onclick="nextPage('user-account-table')">下一页</button>
+            </div>
+        </div>
+        <!-- 用户游戏预约信息查看页面 -->
+        <div id="user-reservation-info" class="page" style="display: none;">
+            <h2>用户游戏预约信息查看</h2>
+            <table id="user-reservation-table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>用户名</th>
+                        <th>用户预约的游戏名称</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格内容将通过 JavaScript 动态添加 -->
+                </tbody>
+            </table>
+            <!-- 分页按钮 -->
+            <div class="pagination">
+                <button onclick="prevPage('user-reservation-table')">上一页</button>
+                <button onclick="nextPage('user-reservation-table')">下一页</button>
+            </div>
+        </div>
+        <!-- 用户游戏订阅信息查看页面 -->
+        <div id="user-subscription-info" class="page" style="display: none;">
+            <h2>用户游戏订阅信息查看</h2>
+            <table id="user-subscription-table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>用户名</th>
+                        <th>用户订阅的游戏名称</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格内容将通过 JavaScript 动态添加 -->
+                </tbody>
+            </table>
+            <!-- 分页按钮 -->
+            <div class="pagination">
+                <button onclick="prevPage('user-subscription-table')">上一页</button>
+                <button onclick="nextPage('user-subscription-table')">下一页</button>
+            </div>
+        </div>
+        <!-- 开发者投递的游戏审核页面 -->
+        <div id="game-review" class="page" style="display: none;">
+            <h2>开发者投递的游戏审核</h2>
+            <table id="game-review-table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>开发者名称</th>
+                        <th>游戏类型</th>
+                        <th>游戏名称</th>
+                        <th>游戏简介</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格内容将通过 JavaScript 动态添加 -->
+                </tbody>
+            </table>
+            <!-- 分页按钮 -->
+            <div class="pagination">
+                <button onclick="prevPage('game-review-table')">上一页</button>
+                <button onclick="nextPage('game-review-table')">下一页</button>
+            </div>
+        </div>
+    </div>
+    <script src="./admin_management.js"></script>
+</body>
+
+</html>
