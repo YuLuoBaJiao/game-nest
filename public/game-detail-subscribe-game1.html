@@ -1,0 +1,241 @@
+<!-- 文件名：game-detail-reserve-game1.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>泡姆泡姆 - 游戏详情</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="shouye.css">
+    <style>
+        /* 修复导航栏遮挡问题 */
+        body {
+        padding-top: 95px; /* 根据实际导航栏高度调整 */
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 75px; /* 调整导航栏实际高度 */
+            z-index: 1000;
+            background: black;
+            padding: 5px 0;
+        }
+        /* 新增详情页样式 */
+        .game-detail-container {
+            max-width: 75%;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .game-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .game-description {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .comments-section {
+            border-top: 2px solid #eee;
+            padding-top: 30px;
+        }
+
+        #commentForm {
+            margin-bottom: 30px;
+            width: 93%;
+        }
+
+        #commentInput {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        .comment-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 50px;
+            width: 93%;
+        }
+
+        .comment-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .comment-author {
+            color: #ff4500;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .comment-content {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏（与library.html保持一致） -->
+    <header>
+        <div class="logo"><img src="img/logo.png" height="49" width="156"/></div>
+        <div class="topbq">
+            <ul>
+                <li><a href="shouye.html" class="top-bq">预约</a></li>
+                <li><a href="ceshi.html" class="top-bq">订阅</a></li>
+                <li><a href="library.html" class="top-bq">我的游戏库</a></li>
+                <li><a href="#" class="top-bq"  style="color: orange">社区</a></li>
+                <li class="dropdown-container">
+                  <a href="#" class="top-bq">更多 ▼</a>
+                  <div class="dropdown-menu">
+                      <div class="dropdown-item" onclick="showNotifications()">📩 通知</div>
+                      <div class="dropdown-item" onclick="showSettings()">⚙️ 设置</div>
+                      <div class="dev-item" onclick="checkDeveloperAccess(event)">💻 开发者中心</div>
+                  </div>
+              </li>
+            </ul>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="搜索..." style="height: 30px;width: 350px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;border: none;background: whitesmoke">
+            <button style="margin-left:-10px;height: 40px;width: 60px;border-bottom-right-radius:15px;border-top-right-radius:15px;border: none;background: whitesmoke;color: black ">搜索</button>
+        </div>
+        <div class="login">
+            <button style="background: darkorange;border-radius: 25px;height: 40px;width: 90px;border: none;color: white;margin-right:30px" 
+                    onclick="location.href='index.html'">退出</button>
+        </div>
+    </header>
+
+    <div class="game-detail-container">
+        <!-- 游戏封面 -->
+        <img src="img/dingyue1.png" class="game-cover" alt="泡泡幸存者游戏封面">
+
+        <!-- 游戏简介 -->
+        <div class="game-description">
+            <h2 style="color: #ff4500; margin-bottom: 15px;">泡泡幸存者</h2>
+            <p>《泡泡幸存者》是一款充满欢乐的多人合作派对游戏！在色彩缤纷的泡泡世界中，玩家需要与队友紧密配合，通过发射不同颜色的泡泡来消除障碍、解开关卡谜题。游戏支持2-4人联机游玩，包含多种游戏模式：</p>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>🎮 故事模式：探索10个风格迥异的主题世界</li>
+                <li>🏆 竞技模式：与其他玩家比拼消除速度</li>
+                <li>🎉 派对模式：包含20+种迷你游戏</li>
+            </ul>
+            <p>游戏现已开放游玩！</p>
+        </div>
+
+        <!-- 评论区 -->
+        <div class="comments-section">
+            <h3 style="color: #333; margin-bottom: 20px;">玩家讨论（<span id="commentCount">0</span> 条）</h3>
+            
+            <!-- 评论表单 -->
+            <form id="commentForm">
+                <textarea 
+                    id="commentInput" 
+                    placeholder="留下你的期待和想法吧～（最多200字）"
+                    maxlength="200"
+                ></textarea>
+                <button 
+                    type="submit"
+                    style="
+                        background: darkorange;
+                        color: white;
+                        padding: 10px 30px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        float: right;
+                    ">
+                    发表评论
+                </button>
+            </form>
+
+            <!-- 评论列表 -->
+            <div class="comment-list" id="commentList">
+                <!-- 评论将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 评论加载和提交功能
+        const COMMENTS_KEY = 'game1-comments-subscribe';
+
+        // 加载评论
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY)) || [];
+            const commentList = document.getElementById('commentList');
+            const commentCount = document.getElementById('commentCount');
+            
+            commentList.innerHTML = '';
+            commentCount.textContent = comments.length;
+
+            comments.forEach(comment => {
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                commentItem.innerHTML = `
+                    <div class="comment-author">${comment.author}</div>
+                    <div class="comment-content">${comment.content}</div>
+                    <div style="color: #999; font-size: 0.9em; margin-top: 5px;">
+                        ${new Date(comment.timestamp).toLocaleString()}
+                    </div>
+                `;
+                commentList.appendChild(commentItem);
+            });
+        }
+
+        // 提交评论
+        document.getElementById('commentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const commentInput = document.getElementById('commentInput');
+            const content = commentInput.value.trim();
+            
+            if (!content) {
+                alert('评论内容不能为空');
+                return;
+            }
+
+            // 获取当前用户（需要先登录）
+            const user = await fetch('/api/user', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            }).then(res => res.json());
+
+            const newComment = {
+                author: user.username,
+                content,
+                timestamp: Date.now()
+            };
+
+            // 保存到本地存储
+            const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY)) || [];
+            comments.unshift(newComment);
+            localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+
+            // 清空输入框
+            commentInput.value = '';
+            loadComments();
+        });
+
+        // 初始化加载评论
+        loadComments();
+    </script>
+</body>
+</html>

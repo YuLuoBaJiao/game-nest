@@ -108,17 +108,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .manage-btn {
-            background: #ff4500;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
         .badge {
             background: #ff4500;
             color: white;
@@ -134,54 +123,6 @@
             padding: 40px 0;
             grid-column: 1 / -1;
         }
-
-        .manage-panel {
-            position: fixed;
-            bottom: -100px;
-            right: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .manage-panel.show {
-            bottom: 30px;
-        }
-        .management-bar {
-          margin: 15px 0;
-          display: flex;
-          justify-content: flex-end;
-        }
-
-        .dropdown-menu {
-          position: absolute;
-          background: white;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          padding: 15px;
-          z-index: 100;
-        }
-
-        .tag-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 10px;
-        }
-
-        .tag-item {
-          background: #f0f0f0;
-          padding: 5px 10px;
-          border-radius: 15px;
-          cursor: pointer;
-        }
-
-        .tag-item.selected {
-          background: #ff6b6b;
-          color: white;
-        }
-
         .modal {
           position: fixed;
           top: 0;
@@ -272,6 +213,144 @@
     75% { transform: translate(-50%, -50%) rotate(3deg); }
     100% { transform: translate(-50%, -50%) rotate(0deg); }
 }
+/* ==================游戏卡片新按钮========================= */
+    /* 新增按钮样式 */
+    .game-buttons {
+        display: flex;
+        gap: 5px;
+        margin-top: 15px;
+    }
+
+    .detail-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        flex: 1;
+    }
+
+    .favorite-btn {
+        background: white;
+        color: #ff69b4;
+        border: 2px solid #ff69b4;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 40px;
+    }
+
+    .favorite-btn.active {
+        background: #ff69b4;
+        color: white;
+    }
+
+    .cancel-btn {
+        flex: 1;
+    }
+
+/* ==================管理按钮========================= */
+/* 管理区域下拉菜单样式 */
+.manage-dropdown {
+    display: none;
+    position: absolute;
+    background: rgba(0,0,0,0.9);
+    border-radius: 8px;
+    padding: 10px 0;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.manage-dropdown-item {
+    color: white;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.manage-dropdown-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+}
+
+.manage-dropdown-item button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 排序选项菜单样式 */
+.sort-options {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: rgba(0,0,0,0.9);
+    border-radius: 8px;
+    padding: 10px 0;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* ====================搜索按钮============================================= */
+/* 新增搜索框样式 */
+.search-box {
+    position: absolute;
+    left: 110%;
+    top: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 15px;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    display: none;
+}
+
+.search-box input {
+    width: 93%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #666;
+    background: #333;
+
+    margin-bottom: 10px;
+}
+
+.search-box button {
+    width: 100%;
+    padding: 8px;
+    background: #272525;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-box button:hover {
+    background: #f79d28;
+}
+
+
+/* ====================管理按钮结束========================================= */
+
+
     </style>
 </head>
 <body>
@@ -307,7 +386,6 @@
     <div class="user-info">
         <div class="user-panel">
             <span>当前账号：<span id="username"></span></span>
-            <!-- <button onclick="showManagePanel()" class="manage-btn">管理游戏库</button> -->
         </div>
     </div>
 
@@ -315,43 +393,40 @@
         <div class="game-section">
             <h2 class="section-title">已预约游戏
                            <!-- 在section-title下方添加 -->
-            <div class="management-bar">
-               <div class="sort-filter">
-                 <button class="manage-btn" onclick="toggleDropdown(this)">管理此区域 ▼</button></div>
-                 <div class="dropdown-menu">
-                   <div class="sort-options">
-                     <label>排序方式：
-                       <select onchange="updateSort(this.value)">
-                         <option value="time_desc">最新入库</option>
-                         <option value="time_asc">最早入库</option>
-                         <option value="name_asc">名称A-Z</option>
-                         <option value="name_desc">名称Z-A</option>
-                       </select>
-                     </label>
-                   </div>
-                   <div class="tag-filter">
-                     <button onclick="toggleTagFilter()">标签筛选 ▼</button>
-                     <div class="tag-container hidden"></div>
-                   </div>
-                   <button class="custom-zone-btn" onclick="showCustomZoneForm()">
-                     创建自定义区域
-                   </button>
-                 </div>
-               
-             </div>
+                           <button id="guanliYuyueQuYu" class="manage-btn">管理预约区域</button>
+                           <div id="yuyueManageDropdown" class="manage-dropdown">
+                               <div class="manage-dropdown-item">
+                                   <button onclick="showSortOptions('yuyue')">排序方式</button>
+                                   <div id="yuyueSortOptions" class="sort-options">
+                                    <div class="manage-dropdown-item">
+                                        <button onclick="updateSort('yuyue', 'time', 'desc')">时间倒序排列</button>
+                                    </div>
+                                    <div class="manage-dropdown-item">
+                                        <button onclick="updateSort('yuyue', 'time', 'asc')">时间正序排列</button>
+                                    </div>
+                                    <div class="manage-dropdown-item">
+                                        <button onclick="updateSort('yuyue', 'name', 'asc')">首字母正序</button>
+                                        <!-- 这两个其实反了，所以调换一下 -->
+                                    </div>
+                                    <div class="manage-dropdown-item">
+                                        <button onclick="updateSort('yuyue', 'name', 'desc')">首字母倒序</button>
+                                    </div>
+                                </div>
+                               </div>
+                               <div class="manage-dropdown-item">
+                                <button onclick="toggleSearchBox('yuyue')">搜索检索</button>
+                                   <div id="yuyueSearchBox" class="search-box">
+                                    <input type="text" placeholder="输入游戏名称关键字">
+                                    <button onclick="performSearch('yuyue')">确认搜索</button>
+                                    <button onclick="clearSearch('yuyue')" 
+                                            style="margin-top:5px;background:#dc3545">清除筛选</button>
+                                </div>
+                               </div>
+                               <div class="manage-dropdown-item">
+                                   <button onclick="alert('功能待添加')">自定义区域</button>
+                               </div>
+                           </div>
 
-             <!-- 添加自定义区域表单 -->
-             <div id="customZoneModal" class="modal hidden">
-               <div class="modal-content">
-                 <span class="close" onclick="closeModal()">&times;</span>
-                 <h3>创建自定义区域</h3>
-                 <input type="text" id="zoneName" placeholder="区域名称">
-                 <div class="game-selector">
-                   <!-- 动态加载游戏 -->
-                 </div>
-                 <button onclick="saveCustomZone()">保存</button>
-               </div>
-             </div>
                 <span class="badge" id="reservation-count">0</span>
             </h2>
             <div class="game-grid" id="reserved-games"></div>
@@ -360,43 +435,39 @@
         <div class="game-section">
             <h2 class="section-title">已订阅游戏
                             <!-- 在section-title下方添加 -->
-            <div class="management-bar">
-                <div class="sort-filter">
-                  <button class="manage-btn" onclick="toggleDropdown(this)">管理此区域 ▼</button>
-                  <div class="dropdown-menu">
-                    <div class="sort-options">
-                      <label>排序方式：
-                        <select onchange="updateSort(this.value)">
-                          <option value="time_desc">最新入库</option>
-                          <option value="time_asc">最早入库</option>
-                          <option value="name_asc">名称A-Z</option>
-                          <option value="name_desc">名称Z-A</option>
-                        </select>
-                      </label>
-                    </div>
-                    <div class="tag-filter">
-                      <button onclick="toggleTagFilter()">标签筛选 ▼</button>
-                      <div class="tag-container hidden"></div>
-                    </div>
-                    <button class="custom-zone-btn" onclick="showCustomZoneForm()">
-                      创建自定义区域
-                    </button>
-                  </div>
-                </div>
-              </div>
+                            <button id="guanliDingyueQuYu" class="manage-btn">管理订阅区域</button>
+                            <div id="dingyueManageDropdown" class="manage-dropdown">
+                                <div class="manage-dropdown-item">
+                                    <button onclick="showSortOptions('dingyue')">排序方式</button>
+                                    <div id="dingyueSortOptions" class="sort-options">
+                                        <div class="manage-dropdown-item">
+                                            <button onclick="updateSort('dingyue', 'time', 'desc')">时间倒序排列</button>
+                                        </div>
+                                        <div class="manage-dropdown-item">
+                                            <button onclick="updateSort('dingyue', 'time', 'asc')">时间正序排列</button>
+                                        </div>
+                                        <div class="manage-dropdown-item">
+                                            <button onclick="updateSort('dingyue_name_asc')">首字母正序</button>
+                                        </div>
+                                        <div class="manage-dropdown-item">
+                                            <button onclick="updateSort('dingyue_name_desc')">首字母倒序</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="manage-dropdown-item">
+                                    <button onclick="toggleSearchBox('dingyue')">搜索检索</button>
+                                    <div id="dingyueSearchBox" class="search-box">
+                                        <input type="text" placeholder="输入游戏名称关键字">
+                                        <button onclick="performSearch('dingyue')">确认搜索</button>
+                                        <button onclick="clearSearch('dingyue')" 
+                                                style="margin-top:5px;background:#dc3545">清除筛选</button>
+                                    </div>
+                                </div>
+                                <div class="manage-dropdown-item">
+                                    <button onclick="alert('功能待添加')">自定义区域</button>
+                                </div>
+                            </div>
 
-              <!-- 添加自定义区域表单 -->
-              <div id="customZoneModal" class="modal hidden">
-                <div class="modal-content">
-                  <span class="close" onclick="closeModal()">&times;</span>
-                  <h3>创建自定义区域</h3>
-                  <input type="text" id="zoneName" placeholder="区域名称">
-                  <div class="game-selector">
-                    <!-- 动态加载游戏 -->
-                  </div>
-                  <button onclick="saveCustomZone()">保存</button>
-                </div>
-              </div>
                 <span class="badge" id="subscription-count">0</span>
             </h2>
             <div class="game-grid" id="subscribed-games"></div>
@@ -446,22 +517,56 @@
             setTimeout(() => window.location.href = 'index.html', 2000);
         }
     }
-        // 加载游戏库数据
-        async function loadLibrary() {
+            // ===========================存储当前排序状态===============================
+            const currentSort = {
+            yuyue: { field: 'time', order: 'desc' }, // 改为默认按time倒序
+            dingyue: { field: 'time', order: 'desc' }
+             };
+        // ===============================加载游戏库数据============================
+        async function loadLibrary(type, field, order) {
             try {
-                const response = await fetch('/api/library', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    }
-                });
+                        // 从当前排序状态获取排序参数
+                const yuyueSortField = currentSort.yuyue.field;
+                const yuyueSortOrder = currentSort.yuyue.order;
+                const dingyueSortField = currentSort.dingyue.field;
+                const dingyueSortOrder = currentSort.dingyue.order;
+                const response = await fetch(`/api/library?yuyueSortField=${yuyueSortField}&yuyueSortOrder=${yuyueSortOrder}&dingyueSortField=${dingyueSortField}&dingyueSortOrder=${dingyueSortOrder}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        
+        const data = await response.json();
+        document.getElementById('reservation-count').textContent = data.reservations.length;
+        document.getElementById('subscription-count').textContent = data.subscriptions.length;
+        // 添加客户端排序逻辑（双保险）
+        const sortGames = (games, type) => {
+            return [...games].sort((a, b) => {
+                const { field, order } = currentSort[type];
+                if (field === 'time') {
+                    return order === 'desc' ? b.time - a.time : a.time - b.time;
+                }
+                // 保留原有名称排序逻辑
+                return order === 'desc' 
+                    ? b.name.localeCompare(a.name) 
+                    : a.name.localeCompare(b.name);
+            });
+        };
+                renderEnhancedGames(sortGames(data.reservations, 'yuyue'), 'reserved-games', '取消预约');
+                renderEnhancedGames(sortGames(data.subscriptions, 'dingyue'), 'subscribed-games', '取消订阅');
+
+                // const response = await fetch('/api/library', {
+                //     headers: {
+                //         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                //     }
+                // });
                 
-                const data = await response.json();
+                // const data = await response.json();
+
+
                 
-                document.getElementById('reservation-count').textContent = data.reservations.length;
-                document.getElementById('subscription-count').textContent = data.subscriptions.length;
-                
-                renderEnhancedGames(data.reservations, 'reserved-games', '取消预约');
-                renderEnhancedGames(data.subscriptions, 'subscribed-games', '取消订阅');
+                // renderEnhancedGames(data.reservations, 'reserved-games', '取消预约');
+                // renderEnhancedGames(data.subscriptions, 'subscribed-games', '取消订阅');
 
                 setTimeout(() => {
                     document.querySelectorAll('.game-card').forEach(card => {
@@ -476,28 +581,46 @@
 
         // 增强版游戏渲染
         function renderEnhancedGames(games, containerId, buttonText) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = games.length ? '' : '<div class="empty-tip">暂时没有内容哦~</div>';
-            
-            games.forEach((game, index) => {
-                const card = document.createElement('div');
-                card.className = `game-card`;
-                card.innerHTML = `
-                    <img src="img/${game.image}" 
-                         alt="${game.name}"
-                         onerror="this.onerror=null;this.src='img/default.png'">
-                    <div class="game-meta">
-                        <h3 class="game-name">${game.name}</h3>
-                    </div>
-                    <button class="cancel-btn" 
-                            onclick="handleEnhancedCancel('${game.id}', this, '${containerId}')"
-                            data-game-type="${containerId === 'subscribed-games' ? 'subscription' : 'reservation'}">
-                        ${buttonText}
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
+    const container = document.getElementById(containerId);
+    container.innerHTML = games.length ? '' : '<div class="empty-tip">暂时没有内容哦~</div>';
+    
+    // 确定游戏类型
+    const gameType = containerId === 'reserved-games' ? 'reserve' : 'subscribe';
+
+    games.forEach((game) => {
+        const card = document.createElement('div');
+        card.className = `game-card`;
+        card.setAttribute('data-game-name', game.name);
+        card.setAttribute('data-game-id', game.id);
+        
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+        const isFavorite = favorites[game.id] || false;
+
+        card.innerHTML = `
+            <a class="game-image-link" href="javascript:void(0)" 
+               onclick="handleGameDetail('${game.id}', '${gameType}')">
+                <img src="img/${game.image}" 
+                     alt="${game.name}"
+                     onerror="this.onerror=null;this.src='img/default.png'">
+            </a>
+            <div class="game-meta">
+                <h3 class="game-name">${game.name}</h3>
+            </div>
+            <div class="game-buttons">
+                <button class="detail-btn" 
+                        onclick="handleGameDetail('${game.id}', '${gameType}')">详情</button>
+                <button class="cancel-btn" 
+                        onclick="handleEnhancedCancel('${game.id}', this, '${containerId}')"
+                        data-game-type="${gameType === 'reserve' ? 'reservation' : 'subscription'}">
+                    ${buttonText}
+                </button>
+                <button class="favorite-btn ${isFavorite ? 'active' : ''}" 
+                        onclick="toggleFavorite(this, '${game.id}')">❤️</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
 
         // 增强取消功能（修复状态同步）
         async function handleEnhancedCancel(gameId, button, containerId) {
@@ -544,43 +667,7 @@
         }
 
 
-        // 显示管理面板
-        function toggleDropdown() {
-            const panel = document.getElementById('manage-panel');
-            panel.classList.toggle('show');
-        }
 
-        // Toast提示
-        function showToast(message, isSuccess = true) {
-            const toast = document.createElement('div');
-            toast.className = `custom-toast ${isSuccess ? 'success' : 'error'}`;
-            toast.innerHTML = `
-                <span>${isSuccess ? '✅' : '⚠️'}</span>
-                <p>${message}</p>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
-        }
-
-        // 状态同步监听
-        function initStateSync() {
-            window.addEventListener('storage', (event) => {
-                if (event.key === 'gameUpdate') {
-                    const updateData = JSON.parse(event.newValue);
-                    if (updateData.action === 'remove') {
-                        // 处理单个取消
-                        const card = document.querySelector(`[data-game-id="${updateData.gameId}"]`);
-                        if (card) card.remove();
-                    }
-                    loadLibrary();
-                }
-            });
-        }
   // 修改检查开发者权限的方法
   function checkDeveloperAccess(event) {
     event.preventDefault();
@@ -608,85 +695,184 @@
         showCustomAlert('错误', '网络连接异常，请稍后重试');
     });
 }
+// ===========================================================
 
-// 新增专用权限提示
-function showAccessDeniedToast() {
-    const toast = document.getElementById('accessDeniedToast');
-    toast.style.display = 'block';
-    setTimeout(() => {
-        toast.style.display = 'none';
-    }, 2000);
-}
-        // 初始化
+
+        // 新增专用权限提示
+        function showAccessDeniedToast() {
+            const toast = document.getElementById('accessDeniedToast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+        // 初始化====正常显示=======================================
         document.addEventListener('DOMContentLoaded', () => {
             loadUserInfo();
             loadLibrary();
             initStateSync();
         });
-        // 自定义
-        let currentZoneType = ''; // 'reserve' 或 'subscribe'
 
-// 初始化标签筛选
-async function initTagFilter() {
-  const res = await fetch('/api/tags');
-  const tags = await res.json();
-  const container = document.querySelector('.tag-container');
-  
-  tags.forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-item';
-    btn.textContent = tag.name;
-    btn.onclick = () => toggleTag(tag.id);
-    container.appendChild(btn);
-  });
+// ===================管理按钮=================================
+// 新增：更新排序功能
+function updateSort(type, field, order) {
+    // 更新排序状态
+    currentSort[type] = { field, order };
+    
+    // 关闭排序菜单，但保持主菜单打开
+    document.getElementById(`${type}SortOptions`).style.display = 'none';
+    
+    // 重新加载数据并应用排序
+    loadLibrary();
+    
+    // 显示排序成功的提示
+    showToast(`已按${getSortText(field, order)}排序`, true);
+}
+// 初始化页面时添加事件监听
+
+    // 管理按钮点击事件
+    document.getElementById('guanliYuyueQuYu').addEventListener('click', function(event) {
+        toggleDropdown('yuyue');
+        event.stopPropagation(); // 防止冒泡到document
+    });
+    
+    document.getElementById('guanliDingyueQuYu').addEventListener('click', function(event) {
+        toggleDropdown('dingyue');
+        event.stopPropagation(); // 防止冒泡到document
+    });
+
+    // 排序方式按钮点击事件 - 保持主菜单打开
+    document.querySelectorAll('.manage-dropdown-item button').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            // 如果是排序方式按钮，切换排序菜单显示状态
+            if (this.textContent.trim() === '排序方式') {
+                const type = this.closest('.manage-dropdown').id.includes('yuyue') ? 'yuyue' : 'dingyue';
+                toggleSortOptions(type);
+            }
+            event.stopPropagation(); // 防止冒泡到document，保持主菜单打开
+        });
+    });
+
+    // 点击页面其他区域关闭下拉菜单
+    document.addEventListener('click', function(event) {
+        // 如果点击发生在下拉菜单外部，则关闭所有菜单
+        const isInsideMenu = event.target.closest('.manage-dropdown, .sort-options');
+        if (!isInsideMenu) {
+            document.querySelectorAll('.manage-dropdown, .sort-options').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+    });
+
+
+// 切换下拉菜单显示状态
+function toggleDropdown(type) {
+    const manageDropdown = document.getElementById(`${type}ManageDropdown`);
+    const sortOptions = document.getElementById(`${type}SortOptions`);
+
+    // 先关闭其他区域的下拉菜单
+    document.querySelectorAll('.manage-dropdown, .sort-options').forEach(el => {
+        if (el.id !== manageDropdown.id && el.id !== sortOptions.id) {
+            el.style.display = 'none';
+        }
+    });
+
+    // 切换当前下拉菜单显示状态
+    if (manageDropdown.style.display === 'block') {
+        manageDropdown.style.display = 'none';
+        sortOptions.style.display = 'none';
+    } else {
+        manageDropdown.style.display = 'block';
+        sortOptions.style.display = 'none';
+    }
 }
 
-// 更新排序
-function updateSort(value) {
-  const [sortField, order] = value.split('_');
-  loadGames(currentZoneType, { 
-    sort: sortField, 
-    order: order.toUpperCase() 
-  });
+// 切换排序菜单显示状态
+function toggleSortOptions(type) {
+    const sortOptions = document.getElementById(`${type}SortOptions`);
+    
+    // 隐藏所有排序菜单
+    document.querySelectorAll('.sort-options').forEach(el => {
+        if (el.id !== sortOptions.id) {
+            el.style.display = 'none';
+        }
+    });
+    
+    // 切换当前排序菜单显示状态
+    sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
+}
+// =======================搜索按钮======================================================
+// 新增搜索功能函数
+function toggleSearchBox(type) {
+    const searchBox = document.getElementById(`${type}SearchBox`);
+    searchBox.style.display = searchBox.style.display === 'block' ? 'none' : 'block';
 }
 
-// 自定义区域管理
-async function showCustomZoneForm() {
-  const res = await fetch(`/api/${currentZoneType}-games`);
-  const games = await res.json();
-  
-  const selector = document.querySelector('.game-selector');
-  selector.innerHTML = games.map(game => `
-    <label>
-      <input type="checkbox" value="${game.id}">
-      ${game.name}
-    </label>
-  `).join('');
-  
-  document.getElementById('customZoneModal').classList.remove('hidden');
+function performSearch(type) {
+    const keyword = document.querySelector(`#${type}SearchBox input`).value.trim().toLowerCase();
+    const containerId = type === 'yuyue' ? 'reserved-games' : 'subscribed-games';
+    const cards = document.getElementById(containerId).querySelectorAll('.game-card');
+
+    cards.forEach(card => {
+        const gameName = card.dataset.gameName.toLowerCase();
+        card.style.display = gameName.includes(keyword) ? 'block' : 'none';
+    });
+
+    // 关闭搜索框
+    document.getElementById(`${type}SearchBox`).style.display = 'none';
 }
 
-async function saveCustomZone() {
-  const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')]
-    .map(input => input.value);
-  
-  await fetch('/api/custom-zones', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-    },
-    body: JSON.stringify({
-      name: document.getElementById('zoneName').value,
-      type: currentZoneType,
-      gameIds: selected
-    })
-  });
-  
-  closeModal();
-  loadLibrary();
+function clearSearch(type) {
+    const containerId = type === 'yuyue' ? 'reserved-games' : 'subscribed-games';
+    document.querySelector(`#${type}SearchBox input`).value = '';
+    
+    document.getElementById(containerId).querySelectorAll('.game-card').forEach(card => {
+        card.style.display = 'block';
+    });
+    
+    document.getElementById(`${type}SearchBox`).style.display = 'none';
 }
 
-    </script>
+// =====================================处理游戏详情跳转=====================================
+function handleGameDetail(gameId, gameType) {
+    const detailPage = `game-detail-${gameType}-${gameId}.html`;
+    
+    // 添加访问记录
+    console.log(`尝试访问${gameType}类型游戏详情：${detailPage}`);
+    
+    fetch(detailPage)
+        .then(response => {
+            if (response.status === 200) {
+                window.location.href = detailPage;
+            } else {
+                window.location.href = `under-construction.html?type=${gameType}&game=${encodeURIComponent(gameId)}`;
+            }
+        })
+        .catch(() => {
+            window.location.href = `under-construction.html?type=${gameType}&game=${encodeURIComponent(gameId)}`;
+        });
+}
+
+// 收藏功能
+function toggleFavorite(button, gameId) {
+    button.classList.toggle('active');
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+    favorites[gameId] = button.classList.contains('active');
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+// 初始化收藏状态
+function initFavorites() {
+    if (!localStorage.getItem('favorites')) {
+        localStorage.setItem('favorites', JSON.stringify({}));
+    }
+}
+
+// 在DOMContentLoaded事件中添加初始化
+document.addEventListener('DOMContentLoaded', () => {
+    initFavorites();
+    // 其他初始化代码...
+});
+</script>
 
 </html>
